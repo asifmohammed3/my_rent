@@ -4,6 +4,7 @@ import 'package:my_rent/constants/color_constants.dart';
 import 'package:my_rent/global_variables/global.dart';
 
 import 'package:flutter/material.dart';
+import 'package:my_rent/screens/home/screen_unit_list.dart/screen_add_unit/widgets/unit_type_dropdown.dart';
 import 'package:my_rent/widgets/cust_textfield_pre_title.dart';
 import 'package:my_rent/widgets/cust_appbar2.dart';
 import 'package:my_rent/widgets/rounded_elevated_button.dart';
@@ -16,13 +17,24 @@ class ScreenAddUnit extends StatefulWidget {
 }
 
 class _ScreenAddUnitState extends State<ScreenAddUnit> {
-  TextEditingController unitNumberController = TextEditingController();
+  //controllers for ACCOMODATE type
+  TextEditingController accomodateBhkController = TextEditingController();
+  TextEditingController accomodateRoomNameController = TextEditingController();
+  TextEditingController accomodateFloorNoController = TextEditingController();
+  TextEditingController accomodateRoomNoController = TextEditingController();
 
-  TextEditingController serviceTypeController = TextEditingController();
+  //controllers for SHOWROOM type
+  TextEditingController showroomAreaController = TextEditingController();
+  TextEditingController showroomRoomNameController = TextEditingController();
+  TextEditingController showroomFloorNoController = TextEditingController();
+  TextEditingController showroomRoomNoController = TextEditingController();
 
-  TextEditingController serviceFeeController = TextEditingController();
+//controllers for STORE type
+  TextEditingController storeAreaController = TextEditingController();
+  TextEditingController storeRoomNameController = TextEditingController();
+  TextEditingController storeFloorNoController = TextEditingController();
+  TextEditingController storeRoomNoController = TextEditingController();
 
-  TextEditingController remarksController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,18 +61,18 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
                         AddUnitTypeDropDown(),
                         CustTextFieldContainer(
                           textFieldName: "BHK",
-                          controller: unitNumberController,
+                          controller: accomodateBhkController,
                         ),
                         CustTextFieldContainer(
                           textFieldName: "Room Name",
-                          controller: unitNumberController,
+                          controller: accomodateRoomNameController,
                         ),
                         CustTextFieldContainer(
                             textFieldName: "Floor No",
-                            controller: serviceTypeController),
+                            controller: accomodateFloorNoController),
                         CustTextFieldContainer(
                             textFieldName: "Room No",
-                            controller: serviceFeeController),
+                            controller: accomodateRoomNoController),
                       ]),
                     ),
                     //------submit button------
@@ -74,7 +86,7 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
               } else if (index == 1) {
                 return Column(
                   children: [
-                    //-------complaints textfields-------
+                    //-------showroom textfields-------
                     Container(
                       height: MediaQuery.of(context).size.height * 0.7,
                       margin: EdgeInsets.all(10),
@@ -82,17 +94,17 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
                         AddUnitTypeDropDown(),
                         CustTextFieldContainer(
                           textFieldName: "Area",
-                          controller: unitNumberController,
+                          controller: showroomAreaController,
                         ),
                         CustTextFieldContainer(
                             textFieldName: "Room Name",
-                            controller: serviceTypeController),
+                            controller: showroomRoomNameController),
                         CustTextFieldContainer(
                             textFieldName: "Floor No",
-                            controller: serviceFeeController),
+                            controller: showroomFloorNoController),
                         CustTextFieldContainer(
                             textFieldName: "Room No",
-                            controller: serviceFeeController),
+                            controller: showroomRoomNoController),
                       ]),
                     ),
                     //------submit button------
@@ -106,7 +118,7 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
               } else if (index == 2) {
                 return Column(
                   children: [
-                    //-------complaints textfields-------
+                    //-------Store textfields-------
                     Container(
                       height: MediaQuery.of(context).size.height * 0.7,
                       margin: EdgeInsets.all(10),
@@ -114,17 +126,17 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
                         AddUnitTypeDropDown(),
                         CustTextFieldContainer(
                           textFieldName: "Area",
-                          controller: unitNumberController,
+                          controller: storeAreaController,
                         ),
                         CustTextFieldContainer(
                             textFieldName: "Room Name",
-                            controller: serviceTypeController),
+                            controller: storeRoomNameController),
                         CustTextFieldContainer(
                             textFieldName: "Floor No",
-                            controller: serviceFeeController),
+                            controller: storeFloorNoController),
                         CustTextFieldContainer(
                             textFieldName: "Room No",
-                            controller: serviceFeeController),
+                            controller: storeRoomNoController),
                       ]),
                     ),
                     //------submit button------
@@ -136,111 +148,10 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
                   ],
                 );
               }
-              return Text("Errrrrrrrrrr");
+              return Center(child: Text("Somethink went wrong"));
             }),
       ),
     );
   }
 }
 
-ValueNotifier<int> addUnitTypeNotifier = ValueNotifier<int>(0);
-
-class AddUnitTypeDropDown extends StatefulWidget {
-  AddUnitTypeDropDown({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<AddUnitTypeDropDown> createState() => _DropdownWidgetState();
-}
-
-class _DropdownWidgetState extends State<AddUnitTypeDropDown> {
-  // Initial Selected Value
-  String dropdownvalue = 'Accomodate';
-
-  // List of items in our dropdown menu
-  var items = [
-    'Accomodate',
-    'Showroom',
-    'Store',
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    var kWidth = MediaQuery.of(context).size.width;
-    var kHeight = MediaQuery.of(context).size.height;
-    return SizedBox(
-      width: kWidth,
-      child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-        SizedBox(
-          width: 100,
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: Text(
-                    maxLines: 2,
-                    softWrap: false,
-                    overflow: TextOverflow.ellipsis,
-                    "Type",
-                    style: TextStyle(fontSize: 13, color: customBlue),
-                  ),
-                ),
-                Text(":")
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Container(
-            margin: EdgeInsets.all(10),
-            child: SizedBox(
-              width: 120,
-              child: Container(
-                child: DropdownButton(
-                  // Initial Value
-                  value: dropdownvalue,
-                  underline: SizedBox(), elevation: 50,
-                  // dropdownColor: Color.fromARGB(240, 14, 76, 149),
-
-                  borderRadius: BorderRadius.circular(15),
-
-                  // Down Arrow Icon
-                  icon: const Icon(
-                    Icons.keyboard_arrow_down,
-                    // color: Colors.white,
-                  ),
-
-                  // Array list of items
-                  items: items.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      enabled: true,
-                      child: Text(
-                        items,
-                        // style: TextStyle(color: Colors.white),
-                      ),
-                    );
-                  }).toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropdownvalue = newValue!;
-                      addUnitTypeNotifier.value = items.indexOf(dropdownvalue);
-
-                      //refresh app to change vehicle part and prop
-                    });
-                  },
-                ),
-              ),
-            ),
-          ),
-        )
-      ]),
-    );
-  }
-}

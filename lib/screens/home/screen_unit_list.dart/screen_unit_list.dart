@@ -19,14 +19,21 @@ import 'package:my_rent/widgets/pie_chart.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 class ScreenUnitList extends StatefulWidget {
-  const ScreenUnitList({Key? key}) : super(key: key);
-
+  ScreenUnitList(
+      {Key? key, required this.propertyName, required this.branchLocation})
+      : super(key: key);
+  String propertyName;
+  String branchLocation;
   @override
-  State<ScreenUnitList> createState() => _ScreenHomeState();
+  State<ScreenUnitList> createState() => _ScreenHomeState(
+      propertyName: propertyName, branchLocation: branchLocation);
 }
 
 class _ScreenHomeState extends State<ScreenUnitList> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  _ScreenHomeState({required this.propertyName, required this.branchLocation});
+  String propertyName;
+  String branchLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -84,18 +91,30 @@ class _ScreenHomeState extends State<ScreenUnitList> {
               //header tile
               unitListHeaderTile(
                   "https://www.nobroker.in/blog/wp-content/uploads/2021/03/buying-residential.jpg",
-                  "Property Name",
-                  "Branch Location"),
+                  "$propertyName",
+                  "$branchLocation"),
 
               // no of vacant occuppied circle dot section
               vacantOccupiedCountSec("1", "0"),
 
               //Unit tile lists
-              unitListTile(
-                unitName: "Unit 1",
-                currentTenant: "Tenant 1",
-                unitStatus: "Vacant", //"Occupied"  or "Vacant"
-                agreeRenewDate: "30/11/2023",
+              Expanded(
+                child: ListView(
+                  children: [
+                    unitListTile(
+                      unitName: "Unit 1",
+                      currentTenant: "Tenant 1",
+                      unitStatus: "Vacant", //"Occupied"  or "Vacant"
+                      agreeRenewDate: "30/11/2023",
+                    ),
+                    unitListTile(
+                      unitName: "Unit 1",
+                      currentTenant: "Tenant 1",
+                      unitStatus: "Occupied", //"Occupied"  or "Vacant"
+                      agreeRenewDate: "30/11/2023",
+                    ),
+                  ],
+                ),
               )
             ],
           ),

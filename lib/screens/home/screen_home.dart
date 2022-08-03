@@ -76,22 +76,12 @@ class _ScreenHomeState extends State<ScreenHome> {
                   child: ListView.builder(
                     itemCount: 1,
                     itemBuilder: (context, index) {
-                      return InkWell(
-                        hoverColor: Colors.transparent,
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              (MaterialPageRoute(builder: (context) {
-                                return ScreenUnitList();
-                              })));
-                        },
-                        child: PropertyTile(
-                          propertyName: "Property ${index}",
-                          branchLocation: "Location ${index}",
-                          numberOfUnits: "4",
-                          imageSrc:
-                              "https://www.nobroker.in/blog/wp-content/uploads/2021/03/buying-residential.jpg",
-                        ),
+                      return PropertyTile(
+                        propertyName: "test property",
+                        branchLocation: "test location",
+                        numberOfUnits: "4",
+                        imageSrc:
+                            "https://www.nobroker.in/blog/wp-content/uploads/2021/03/buying-residential.jpg",
                       );
                     },
                   )),
