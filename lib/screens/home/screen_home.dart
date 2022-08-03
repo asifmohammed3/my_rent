@@ -2,7 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:my_rent/constants/color_constants.dart';
+import 'package:my_rent/register_signin_sections/authentication/authentication.dart';
+import 'package:my_rent/register_signin_sections/screen_signin.dart';
 import 'package:my_rent/screens/home/add_property_section/add_property_popup.dart';
+import 'package:my_rent/screens/home/screen_unit_list.dart/screen_unit_list.dart';
 import 'package:my_rent/screens/home/widgets/property_tile.dart';
 import 'package:my_rent/widgets/cust_appbar.dart';
 import 'package:my_rent/widgets/drawer_section.dart/cust_drawer.dart';
@@ -68,20 +71,30 @@ class _ScreenHomeState extends State<ScreenHome> {
           child: Stack(
             children: [
               CustSearchBar(),
-              // Padding(
-              //     padding: EdgeInsets.only(top: 60),
-              //     child: ListView.builder(
-              //       itemCount: 4,
-              //       itemBuilder: (context, index) {
-              //         return PropertyTile(
-              //           propertyName: "Property ${index}",
-              //           branchLocation: "Location ${index}",
-              //           numberOfUnits: "4",
-              //           imageSrc:
-              //               "https://www.nobroker.in/blog/wp-content/uploads/2021/03/buying-residential.jpg",
-              //         );
-              //       },
-              //     )),
+              Padding(
+                  padding: EdgeInsets.only(top: 60),
+                  child: ListView.builder(
+                    itemCount: 1,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        hoverColor: Colors.transparent,
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              (MaterialPageRoute(builder: (context) {
+                                return ScreenUnitList();
+                              })));
+                        },
+                        child: PropertyTile(
+                          propertyName: "Property ${index}",
+                          branchLocation: "Location ${index}",
+                          numberOfUnits: "4",
+                          imageSrc:
+                              "https://www.nobroker.in/blog/wp-content/uploads/2021/03/buying-residential.jpg",
+                        ),
+                      );
+                    },
+                  )),
             ],
           ),
         ));

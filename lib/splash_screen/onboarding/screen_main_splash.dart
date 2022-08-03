@@ -1,23 +1,64 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
-
+import 'dart:async';
 import 'package:my_rent/constants/color_constants.dart';
 import 'package:my_rent/constants/styles.dart';
+import 'package:my_rent/screens/screen_main_page.dart';
 import 'package:my_rent/splash_screen/onboarding/screen_onboarding.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds: 2), () {
+      FirebaseAuth.instance.authStateChanges().listen((user) {
+        if (user == null) {
+          print('User is currently signed out!');
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => ScreenOnboarding()),
+              (route) => false);
+        } else {
+          print('User is signed in!');
+          // print(FirebaseAuth.instance.currentUser!.getIdToken());
+
+          print(user.getIdToken().toString());
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => ScreenMainPage()),
+              (route) => false);
+        }
+      });
+
+      // if (FirebaseAuth.instance.currentUser != null) {
+      //   // user not logged ==> onboard
+      //   Navigator.pushAndRemoveUntil(
+      //       context,
+      //       MaterialPageRoute(builder: (_) => ScreenOnboarding()),
+      //       (route) => false);
+      // } else {
+      //   // user already logged in ==> Home Screen
+      //   Navigator.pushAndRemoveUntil(
+      //       context,
+      //       MaterialPageRoute(builder: (_) => ScreenMainPage()),
+      //       (route) => false);
+      // }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ScreenOnboarding();
-        }));
-      },
-      child: Stack(
+    return Scaffold(
+      body: Stack(
         children: [
           Positioned(
             left: -40,

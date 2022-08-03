@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:my_rent/constants/color_constants.dart';
+import 'package:my_rent/register_signin_sections/authentication/authentication.dart';
+import 'package:my_rent/register_signin_sections/screen_signin.dart';
 import 'package:my_rent/widgets/drawer_section.dart/components/drawer_header_section.dart';
 
 class CustDrawer extends StatelessWidget {
@@ -21,11 +23,17 @@ class CustDrawer extends StatelessWidget {
         width: 250,
         child: Column(children: [
           drawerHeaderSection(),
-          
+          ElevatedButton(
+              onPressed: () {
+                signOut();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                  return ScreenSignIn();
+                }));
+              },
+              child: Text("SignOut"))
         ]),
       ),
     );
   }
-
-  
 }

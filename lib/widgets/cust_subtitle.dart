@@ -7,7 +7,7 @@ class CustSubTitle extends StatelessWidget {
       required this.subtitle,
       this.paddingTop = 70,
       this.fontsize = 20,
-      this.color = customBlue,
+      this.color = textcustomBlue,
       this.fontWeight = FontWeight.w400})
       : super(key: key);
   String subtitle;

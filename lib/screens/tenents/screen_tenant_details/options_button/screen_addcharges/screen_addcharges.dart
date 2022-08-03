@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_rent/screens/tenents/screen_tenant_details/options_button/screen_addcharges/widgets/reason_dropdown.dart';
-import 'package:my_rent/screens/tenents/screen_tenant_details/options_button/widgets/cust_textfield_container.dart';
+import 'package:my_rent/widgets/cust_textfield_pre_title.dart';
 import 'package:my_rent/widgets/cust_appbar2.dart';
 import 'package:my_rent/widgets/rounded_elevated_button.dart';
 

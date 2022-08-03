@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "114000187427",
+    "project_id": "cozat-my-rent",
+    "storage_bucket": "cozat-my-rent.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114000187427:android:8642481b0e30c447e42196",
+        "android_client_info": {
+          "package_name": "com.example.my_rent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114000187427-s5auk0mov49m15b3b2o6c3qc8a2q8qum.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbyb5M3JN0tdAjnjIM0fXBSLkeCyu1hAM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114000187427-s5auk0mov49m15b3b2o6c3qc8a2q8qum.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

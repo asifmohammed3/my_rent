@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 import 'package:my_rent/constants/color_constants.dart';
+import 'package:my_rent/register_signin_sections/authentication/authentication.dart';
 import 'package:my_rent/register_signin_sections/screen_register.dart';
 import 'package:my_rent/register_signin_sections/widgets/sign_up_in_textfield.dart';
 import 'package:my_rent/screens/screen_main_page.dart';
@@ -11,9 +12,17 @@ import 'package:my_rent/widgets/cust_elevatedbutton.dart';
 import 'package:my_rent/widgets/cust_subtitle.dart';
 import 'package:my_rent/widgets/cust_textbutton.dart';
 
-class ScreenSignIn extends StatelessWidget {
+class ScreenSignIn extends StatefulWidget {
   ScreenSignIn({Key? key}) : super(key: key);
+
+  @override
+  State<ScreenSignIn> createState() => _ScreenSignInState();
+}
+
+class _ScreenSignInState extends State<ScreenSignIn> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
+
   TextEditingController passwordController = TextEditingController();
 
   @override
@@ -28,11 +37,14 @@ class ScreenSignIn extends StatelessWidget {
             color: Colors.white,
           ),
           backgroundColor: customBlue,
-          onPressed: (() {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) {
-              return ScreenMainPage();
-            }));
+          onPressed: (() async {
+            _formKey.currentState!.validate();
+            if (await signIn(emailController.text, passwordController.text)) {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return ScreenMainPage();
+              }));
+            }
           }),
         ),
       ),
@@ -95,67 +107,97 @@ class ScreenSignIn extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    SignUpInTextField(
-                      hintText: "Email",
-                      controller: emailController,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    SignUpInTextField(
-                      obscureText: true,
-                      hintText: "Password",
-                      controller: passwordController,
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
                     children: [
-                      Column(
-                        children: [
-                          Text(
-                            "Don't have an account?",
-                            style: TextStyle(
-                                color: pieChartEmptyColor,
-                                decoration: TextDecoration.underline),
-                          ),
-                          Container(
-                            width: 150,
-                            child: OutlinedButton(
-                              onPressed: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return ScreenRegister();
-                                }));
-                              },
-                              child: Text(
-                                'Register',
-                                style: TextStyle(
-                                    color: customBlue,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(color: customBlue, width: 1),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
+                      SignUpInTextField(
+                        hintText: "Email",
+                        controller: emailController,
+                        onChanged: (value) {
+                          _formKey.currentState!.validate();
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return ("Please Enter Your Email");
+                          }
+                          // reg expression for email validation
+                          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                              .hasMatch(value)) {
+                            return ("Please Enter a valid email");
+                          }
+
+                          return null;
+                        },
                       ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SignUpInTextField(
+                        obscureText: true,
+                        hintText: "Password",
+                        controller: passwordController,
+                        onChanged: (value) {
+                          _formKey.currentState!.validate();
+                        },
+                        validator: (value) {
+                          RegExp regex = new RegExp(r'^.{6,}$');
+                          if (value!.isEmpty) {
+                            return ("Password is required for login");
+                          }
+                          if (!regex.hasMatch(value)) {
+                            return ("Enter Valid Password(Min. 6 Character)");
+                          }
+                        },
+                      )
                     ],
                   ),
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              "Don't have an account?",
+                              style: TextStyle(
+                                  color: pieChartEmptyColor,
+                                  decoration: TextDecoration.underline),
+                            ),
+                            Container(
+                              width: 150,
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return ScreenRegister();
+                                  }));
+                                },
+                                child: Text(
+                                  'Register',
+                                  style: TextStyle(
+                                      color: customBlue,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(color: customBlue, width: 1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           )
         ],

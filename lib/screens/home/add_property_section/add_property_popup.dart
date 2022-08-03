@@ -28,10 +28,12 @@ showAddropertyPopup(BuildContext context) {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
-              onTap: () => Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: ((context) {
-                return ScreenAddSingleUnitProperty();
-              }))),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                  return ScreenAddSingleUnitProperty();
+                })));
+              },
               child: Container(
                 height: 70,
                 decoration: BoxDecoration(

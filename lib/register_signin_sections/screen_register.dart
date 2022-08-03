@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 import 'package:my_rent/constants/color_constants.dart';
+import 'package:my_rent/register_signin_sections/authentication/authentication.dart';
 import 'package:my_rent/register_signin_sections/screen_register_next.dart';
 import 'package:my_rent/register_signin_sections/screen_signin.dart';
 import 'package:my_rent/register_signin_sections/widgets/sign_up_in_textfield.dart';
@@ -11,12 +12,22 @@ import 'package:my_rent/widgets/cust_elevatedbutton.dart';
 import 'package:my_rent/widgets/cust_subtitle.dart';
 import 'package:my_rent/widgets/cust_textbutton.dart';
 
-class ScreenRegister extends StatelessWidget {
+class ScreenRegister extends StatefulWidget {
   ScreenRegister({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<ScreenRegister> createState() => _ScreenRegisterState();
+}
+
+class _ScreenRegisterState extends State<ScreenRegister> {
+  final _formKey = GlobalKey<FormState>();
+
   TextEditingController emailController = TextEditingController();
+
   TextEditingController passwordController = TextEditingController();
+
   TextEditingController passConfirmController = TextEditingController();
 
   @override
@@ -31,10 +42,14 @@ class ScreenRegister extends StatelessWidget {
             color: Colors.white,
           ),
           backgroundColor: customBlue,
-          onPressed: (() {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ScreenRegisterNext();
-            }));
+          onPressed: (() async {
+            _formKey.currentState!.validate() ;
+            if (await signUp(emailController.text, passwordController.text)) {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return ScreenSignIn();
+              }));
+            }
           }),
         ),
       ),
@@ -97,76 +112,118 @@ class ScreenRegister extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    SignUpInTextField(
-                      hintText: "Email",
-                      controller: emailController,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    SignUpInTextField(
-                      obscureText: true,
-                      hintText: "Password",
-                      controller: passwordController,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    SignUpInTextField(
-                      obscureText: true,
-                      hintText: "Confirm Password",
-                      controller: passConfirmController,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 30.0, top: 50),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          InkWell(
-                            child: CustSubTitle(
-                              subtitle: "Next",
-                              fontWeight: FontWeight.w500,
-                              fontsize: 25,
-                              paddingTop: 0,
-                            ),
-                            onTap: () {},
-                          ),
-                        ],
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      SignUpInTextField(
+                        hintText: "Email",
+                        controller: emailController,
+                        onChanged: (value) {
+                          _formKey.currentState!.validate();
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return ("Please Enter Your Email");
+                          }
+                          // reg expression for email validation
+                          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                              .hasMatch(value)) {
+                            return ("Please Enter a valid email");
+                          }
+
+                          return null;
+                        },
                       ),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Existing User?",
-                      style: TextStyle(
-                          color: pieChartEmptyColor,
-                          decoration: TextDecoration.underline),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ScreenSignIn();
-                        }));
-                      },
-                      child: Text(
-                        "Sign In",
+                      SizedBox(
+                        height: 5,
+                      ),
+                      SignUpInTextField(
+                        obscureText: true,
+                        hintText: "Password",
+                        controller: passwordController,
+                        onChanged: (value) {
+                          _formKey.currentState!.validate();
+                        },
+                        validator: (value) {
+                          RegExp regex = new RegExp(r'^.{6,}$');
+                          if (value!.isEmpty) {
+                            return ("Password is required");
+                          }
+                          if (!regex.hasMatch(value)) {
+                            return ("Enter Valid Password(Min. 6 Character)");
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      SignUpInTextField(
+                        obscureText: true,
+                        hintText: "Confirm password",
+                        controller: passConfirmController,
+                        onChanged: (value) {
+                          _formKey.currentState!.validate();
+                        },
+                        validator: (value) {
+                          if (passConfirmController.text !=
+                              passwordController.text) {
+                            return "Password don't match";
+                          }
+                          return null;
+
+                          return null;
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 30.0, top: 50),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              child: CustSubTitle(
+                                subtitle: "Next",
+                                fontWeight: FontWeight.w500,
+                                fontsize: 25,
+                                paddingTop: 0,
+                              ),
+                              onTap: () {},
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Existing User?",
                         style: TextStyle(
-                            color: customBlue,
+                            color: pieChartEmptyColor,
                             decoration: TextDecoration.underline),
                       ),
-                    )
-                  ],
-                )
-              ],
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) {
+                            return ScreenSignIn();
+                          }));
+                        },
+                        child: Text(
+                          "Sign In",
+                          style: TextStyle(
+                              color: customBlue,
+                              decoration: TextDecoration.underline),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           )
         ],

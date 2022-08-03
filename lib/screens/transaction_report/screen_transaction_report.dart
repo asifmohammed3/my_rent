@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:my_rent/constants/color_constants.dart';
-import 'package:my_rent/screens/transaction_report/widgets/linear_progressbar.dart';
+import 'package:my_rent/widgets/linear_progressbar.dart';
 import 'package:my_rent/screens/transaction_report/widgets/transaction_expansion_tile.dart';
 import 'package:my_rent/screens/transaction_report/widgets/transacton_header_tile.dart';
 import 'package:my_rent/widgets/cust_appbar.dart';

@@ -10,8 +10,11 @@ class SignUpInTextField extends StatelessWidget {
       {Key? key,
       required this.controller,
       required this.hintText,
+      this.validator,this.onChanged,
       this.obscureText = false})
       : super(key: key);
+  void Function(String)? onChanged;
+  String? Function(String?)? validator;
   bool obscureText;
   String hintText;
   TextEditingController controller = TextEditingController();
@@ -19,7 +22,9 @@ class SignUpInTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: 300,
-        child: TextField(
+        child: TextFormField(
+          onChanged: onChanged,
+          validator: validator,
           obscureText: obscureText,
           controller: controller,
           cursorColor: customBlue,

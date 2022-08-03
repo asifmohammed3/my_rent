@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_rent/constants/color_constants.dart';
-import 'package:my_rent/screens/transaction_report/widgets/linear_progressbar.dart';
+import 'package:my_rent/widgets/linear_progressbar.dart';
 
 class TransactionHeaderTile extends StatelessWidget {
   const TransactionHeaderTile({
@@ -40,15 +40,14 @@ class TransactionHeaderTile extends StatelessWidget {
                   child: Center(
                     child: Text(
                       "January",
-                      style: TextStyle(
-                          fontSize: 10, color: Colors.white),
+                      style: TextStyle(fontSize: 10, color: Colors.white),
                     ),
                   ),
                 ),
               ),
             ],
           ),
-          LinearProgressBar(),
+          LinearProgressBar(value: 50),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -59,13 +58,11 @@ class TransactionHeaderTile extends StatelessWidget {
                   children: [
                     Text(
                       "Collected",
-                      style: TextStyle(
-                          color: bottomNavYellow, fontSize: 10),
+                      style: TextStyle(color: bottomNavYellow, fontSize: 10),
                     ),
                     Text(
                       "Rs. 20,000",
-                      style: TextStyle(
-                          color: bottomNavYellow, fontSize: 15),
+                      style: TextStyle(color: bottomNavYellow, fontSize: 15),
                     )
                   ],
                 ),
@@ -80,13 +77,11 @@ class TransactionHeaderTile extends StatelessWidget {
                   children: [
                     Text(
                       "Pending",
-                      style: TextStyle(
-                          color: bottomNavYellow, fontSize: 10),
+                      style: TextStyle(color: bottomNavYellow, fontSize: 10),
                     ),
                     Text(
                       "Rs. 20,000",
-                      style: TextStyle(
-                          color: bottomNavYellow, fontSize: 15),
+                      style: TextStyle(color: bottomNavYellow, fontSize: 15),
                     )
                   ],
                 ),
