@@ -1,20 +1,51 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:my_rent/constants/color_constants.dart';
+import 'package:my_rent/screens/home/add_property_section/widgets/after_pick_display_img.dart';
 import 'package:my_rent/widgets/cust_textfield_pre_title.dart';
 import 'package:my_rent/widgets/cust_appbar2.dart';
 import 'package:my_rent/widgets/cust_textbutton.dart';
+import 'package:my_rent/widgets/image_uploading_tile.dart';
 import 'package:my_rent/widgets/rounded_elevated_button.dart';
 
-class ScreenAddSingleUnitProperty extends StatelessWidget {
+class ScreenAddSingleUnitProperty extends StatefulWidget {
   ScreenAddSingleUnitProperty({Key? key}) : super(key: key);
 
+  @override
+  State<ScreenAddSingleUnitProperty> createState() =>
+      _ScreenAddSingleUnitPropertyState();
+}
+
+class _ScreenAddSingleUnitPropertyState
+    extends State<ScreenAddSingleUnitProperty> {
   TextEditingController propertyNameController = TextEditingController();
+
   TextEditingController noOfRoomController = TextEditingController();
-//TODO upload img  (not a text field)
-  TextEditingController imageController = TextEditingController();
+
+  File? imageFile;
+
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 50);
+
+      if (image == null) return;
+
+      final imageTemp = File(image.path);
+
+      setState(() => imageFile = imageTemp);
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    var kWidth = MediaQuery.of(context).size.width;
+    var kHeight = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -38,8 +69,14 @@ class ScreenAddSingleUnitProperty extends StatelessWidget {
                 CustTextFieldContainer(
                     textFieldName: "No. of Rooms",
                     controller: noOfRoomController),
-                CustTextFieldContainer(
-                    textFieldName: "Image", controller: imageController),
+                ImageUploadingTile(
+                  textFieldName: "Image",
+                  onPressed: () {
+                    pickImage();
+                  },
+                ),
+                //Image display section
+                afterPickDisplaySection(kWidth, imageFile),
               ]),
             ),
             //------Add button------
@@ -48,7 +85,7 @@ class ScreenAddSingleUnitProperty extends StatelessWidget {
               buttonTitle: "Add",
               buttonColor: bottomNavYellow,
               borderRadius: 12,
-            )
+            ),
           ],
         ),
       ),

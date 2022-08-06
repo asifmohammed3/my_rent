@@ -5,6 +5,8 @@ import 'dart:math' as math;
 import 'dart:async';
 import 'package:my_rent/constants/color_constants.dart';
 import 'package:my_rent/constants/styles.dart';
+import 'package:my_rent/firebase/functions.dart';
+import 'package:my_rent/global_variables/global.dart';
 import 'package:my_rent/screens/screen_main_page.dart';
 import 'package:my_rent/splash_screen/onboarding/screen_onboarding.dart';
 
@@ -19,6 +21,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+
+    // updateRole();
+    // processSignUp();
+    // print("called cloud function");
+
     Timer(Duration(seconds: 2), () {
       FirebaseAuth.instance.authStateChanges().listen((user) {
         if (user == null) {
@@ -30,28 +37,15 @@ class _SplashScreenState extends State<SplashScreen> {
         } else {
           print('User is signed in!');
           // print(FirebaseAuth.instance.currentUser!.getIdToken());
+          updateToken(user.getIdToken());
+          // tokenID = user.getIdToken();
 
-          print(user.getIdToken().toString());
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (_) => ScreenMainPage()),
               (route) => false);
         }
       });
-
-      // if (FirebaseAuth.instance.currentUser != null) {
-      //   // user not logged ==> onboard
-      //   Navigator.pushAndRemoveUntil(
-      //       context,
-      //       MaterialPageRoute(builder: (_) => ScreenOnboarding()),
-      //       (route) => false);
-      // } else {
-      //   // user already logged in ==> Home Screen
-      //   Navigator.pushAndRemoveUntil(
-      //       context,
-      //       MaterialPageRoute(builder: (_) => ScreenMainPage()),
-      //       (route) => false);
-      // }
     });
   }
 
