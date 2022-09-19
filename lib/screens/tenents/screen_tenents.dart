@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_rent/constants/color_constants.dart';
 import 'package:my_rent/screens/tenents/tenant_widgets/tenant_list_tile.dart';
 import 'package:my_rent/widgets/cust_appbar.dart';
-import 'package:my_rent/widgets/drawer_section.dart/cust_drawer.dart';
+import 'package:my_rent/widgets/drawer_section/cust_drawer.dart';
 import 'package:my_rent/widgets/cust_searchbar.dart';
 import 'package:my_rent/widgets/cust_subtitle.dart';
 

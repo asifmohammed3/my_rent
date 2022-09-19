@@ -13,7 +13,7 @@ import 'package:my_rent/screens/home/widgets/property_tile.dart';
 import 'package:my_rent/widgets/bottom_nav_widget.dart';
 import 'package:my_rent/widgets/cust_appbar.dart';
 import 'package:my_rent/widgets/cust_subtitle.dart';
-import 'package:my_rent/widgets/drawer_section.dart/cust_drawer.dart';
+import 'package:my_rent/widgets/drawer_section/cust_drawer.dart';
 import 'package:my_rent/widgets/cust_searchbar.dart';
 import 'package:my_rent/widgets/pie_chart.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -99,21 +99,23 @@ class _ScreenHomeState extends State<ScreenUnitList> {
 
               //Unit tile lists
               Expanded(
-                child: ListView(
-                  children: [
-                    unitListTile(
-                      unitName: "Unit 1",
-                      currentTenant: "Tenant 1",
-                      unitStatus: "Vacant", //"Occupied"  or "Vacant"
-                      agreeRenewDate: "30/11/2023",
-                    ),
-                    unitListTile(
-                      unitName: "Unit 1",
-                      currentTenant: "Tenant 1",
-                      unitStatus: "Occupied", //"Occupied"  or "Vacant"
-                      agreeRenewDate: "30/11/2023",
-                    ),
-                  ],
+                child: Expanded(
+                  child: ListView(
+                    children: [
+                      unitListTile(
+                        unitName: "Unit 1",
+                        currentTenant: "Tenant 1",
+                        unitStatus: "Vacant", //"Occupied"  or "Vacant"
+                        agreeRenewDate: "30/11/2023",
+                      ),
+                      unitListTile(
+                        unitName: "Unit 1",
+                        currentTenant: "Tenant 1",
+                        unitStatus: "Occupied", //"Occupied"  or "Vacant"
+                        agreeRenewDate: "30/11/2023",
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],

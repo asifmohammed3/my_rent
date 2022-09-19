@@ -27,6 +27,8 @@ class _ScreenSignInState extends State<ScreenSignIn> {
 
   @override
   Widget build(BuildContext context) {
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: Padding(

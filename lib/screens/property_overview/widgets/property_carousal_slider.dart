@@ -76,7 +76,9 @@ class PropertyCarousalSlider extends StatefulWidget {
 }
 
 class _PropertyCarousalSliderState extends State<PropertyCarousalSlider> {
-  bool propertyTileselction = false;
+
+  
+  bool propertyTileselection = false;
 
   @override
   Widget build(BuildContext context) {
@@ -86,13 +88,13 @@ class _PropertyCarousalSliderState extends State<PropertyCarousalSlider> {
         child: InkWell(
           onTap: () {
             setState(() {
-              propertyTileselction = !propertyTileselction;
+              propertyTileselection = !propertyTileselection;
               print(index);
             });
           },
           child: Container(
             width: 195,
-            decoration: propertyTileselction
+            decoration: propertyTileselection
                 ? BoxDecoration(
                     color: Colors.white,
                     border: Border.all(width: 2.8, color: bottomNavYellow),

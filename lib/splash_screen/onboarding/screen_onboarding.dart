@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_rent/constants/color_constants.dart';
 import 'package:my_rent/screens/screen_main_page.dart';
+import 'package:my_rent/splash_screen/onboarding/screen_main_splash.dart';
 import 'package:my_rent/splash_screen/welcome_screen/screen_welcome.dart';
 import 'package:my_rent/widgets/cust_elevatedbutton.dart';
 import 'package:my_rent/widgets/cust_subtitle.dart';
@@ -48,6 +51,8 @@ class _MyHomePageState extends State<ScreenOnboarding> {
     var kWidth = MediaQuery.of(context).size.width;
 
     var kHeight = MediaQuery.of(context).size.height;
+
+    
 
     return Container(
         decoration: const BoxDecoration(

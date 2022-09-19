@@ -1,9 +1,9 @@
 bool propertySelected = false;
 bool vehicleSelected = false;
 
-var tokenID;
+dynamic tokenID;
 
-Future<dynamic> updateToken(token)async{
-   tokenID=token;
-  
-}
+// Future<dynamic> updateToken(token) async {
+//   tokenID = token;
+
+// }

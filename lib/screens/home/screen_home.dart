@@ -8,7 +8,7 @@ import 'package:my_rent/screens/home/add_property_section/add_property_popup.dar
 import 'package:my_rent/screens/home/screen_unit_list.dart/screen_unit_list.dart';
 import 'package:my_rent/screens/home/widgets/property_tile.dart';
 import 'package:my_rent/widgets/cust_appbar.dart';
-import 'package:my_rent/widgets/drawer_section.dart/cust_drawer.dart';
+import 'package:my_rent/widgets/drawer_section/cust_drawer.dart';
 import 'package:my_rent/widgets/cust_searchbar.dart';
 import 'package:my_rent/widgets/pie_chart.dart';
 import 'package:pie_chart/pie_chart.dart';

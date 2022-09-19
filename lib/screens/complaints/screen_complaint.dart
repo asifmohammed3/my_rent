@@ -3,7 +3,7 @@ import 'package:my_rent/constants/color_constants.dart';
 import 'package:my_rent/screens/complaints/widgets/complaint_tile.dart';
 import 'package:my_rent/widgets/cust_appbar.dart';
 import 'package:my_rent/widgets/cust_subtitle.dart';
-import 'package:my_rent/widgets/drawer_section.dart/cust_drawer.dart';
+import 'package:my_rent/widgets/drawer_section/cust_drawer.dart';
 
 class ScreenComplaint extends StatefulWidget {
   const ScreenComplaint({Key? key}) : super(key: key);

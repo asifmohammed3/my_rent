@@ -46,6 +46,7 @@ dependencies:
   fluttertoast: ^8.0.9
   cloud_functions: ^3.3.3
   image_picker: ^0.8.5+3
+  jwt_decoder: ^2.0.1
 
 dev_dependencies:
   flutter_test:

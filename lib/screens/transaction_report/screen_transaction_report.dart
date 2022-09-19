@@ -7,7 +7,7 @@ import 'package:my_rent/screens/transaction_report/widgets/transaction_expansion
 import 'package:my_rent/screens/transaction_report/widgets/transacton_header_tile.dart';
 import 'package:my_rent/widgets/cust_appbar.dart';
 import 'package:my_rent/widgets/cust_elevatedbutton.dart';
-import 'package:my_rent/widgets/drawer_section.dart/cust_drawer.dart';
+import 'package:my_rent/widgets/drawer_section/cust_drawer.dart';
 import 'package:my_rent/widgets/pie_chart.dart';
 
 class ScreenTransactionReport extends StatefulWidget {

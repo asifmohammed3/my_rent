@@ -7,6 +7,7 @@ import 'package:my_rent/constants/color_constants.dart';
 import 'package:my_rent/constants/styles.dart';
 import 'package:my_rent/firebase/functions.dart';
 import 'package:my_rent/global_variables/global.dart';
+import 'package:my_rent/main.dart';
 import 'package:my_rent/screens/screen_main_page.dart';
 import 'package:my_rent/splash_screen/onboarding/screen_onboarding.dart';
 
@@ -18,39 +19,43 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
 
-    // updateRole();
-    // processSignUp();
-    // print("called cloud function");
+  //   // updateRole();
+  //   // processSignUp();
+  //   // print("called cloud function");
 
-    Timer(Duration(seconds: 2), () {
-      FirebaseAuth.instance.authStateChanges().listen((user) {
-        if (user == null) {
-          print('User is currently signed out!');
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => ScreenOnboarding()),
-              (route) => false);
-        } else {
-          print('User is signed in!');
-          // print(FirebaseAuth.instance.currentUser!.getIdToken());
-          updateToken(user.getIdToken());
-          // tokenID = user.getIdToken();
+  //   // Timer(Duration(seconds: 2), () {
+  //   //   FirebaseAuth.instance.authStateChanges().listen((user) {
+  //   //     if (user == null) {
+  //   //       print('User is currently signed out!');
+  //   //       Navigator.pushAndRemoveUntil(
+  //   //           context,
+  //   //           MaterialPageRoute(builder: (_) => ScreenOnboarding()),
+  //   //           (route) => false);
+  //   //     } else {
+  //   //       print('User is signed in!');
+  //   //       // print(FirebaseAuth.instance.currentUser!.getIdToken());
+  //   //       updateToken(user.getIdToken());
+  //   //       // tokenID = user.getIdToken();
 
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => ScreenMainPage()),
-              (route) => false);
-        }
-      });
-    });
-  }
+  //   //       Navigator.pushAndRemoveUntil(
+  //   //           context,
+  //   //           MaterialPageRoute(builder: (_) => ScreenMainPage()),
+  //   //           (route) => false);
+  //   //     }
+  //   //   });
+  //   // });
+  // }
 
   @override
   Widget build(BuildContext context) {
+    Timer(
+        Duration(seconds: 2),
+        () => Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (BuildContext context) => Wrapper())));
     return Scaffold(
       body: Stack(
         children: [

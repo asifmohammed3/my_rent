@@ -5,7 +5,7 @@ import 'package:my_rent/screens/property_overview/screen_property_overview_main.
 import 'package:my_rent/screens/tenents/screen_tenents.dart';
 import 'package:my_rent/screens/transaction_report/screen_transaction_report.dart';
 import 'package:my_rent/widgets/bottom_nav_widget.dart';
-import 'package:my_rent/widgets/drawer_section.dart/cust_drawer.dart';
+import 'package:my_rent/widgets/drawer_section/cust_drawer.dart';
 
 class ScreenMainPage extends StatelessWidget {
   const ScreenMainPage({Key? key}) : super(key: key);
