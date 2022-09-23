@@ -2,17 +2,41 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_rent/constants/color_constants.dart';
+import 'package:my_rent/firebase/functions.dart';
+import 'package:my_rent/global_variables/global.dart';
+import 'package:my_rent/main.dart';
 import 'package:my_rent/screens/screen_main_page.dart';
 
 Future<bool> signUp(String emailAddress, String password) async {
-  bool isSuccess;
+  bool isSuccess=false;
   try {
     final credential =
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: emailAddress,
       password: password,
     );
+    await updateRole();
+    FirebaseAuth.instance.authStateChanges().listen((user) async {
+    if (user == null) {
+      print('User is currently signed out!!!!!');
+      tokenID = null;
+      print(tokenID);
+    } else {
+      print('User is signed in!!!!');
+      dynamic tokenResult = await user.getIdToken(true);
+
+      tokenID = tokenResult;
+      // print(tokenResult);
+
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(tokenID);
+      // print(tokenID);
+      print(decodedToken);
+    }
+  });
+    // print(JwtDecoder.decode(tokenID));
+
     isSuccess = true;
   } on FirebaseAuthException catch (e) {
     Fluttertoast.showToast(

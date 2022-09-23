@@ -3,6 +3,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:my_rent/constants/color_constants.dart';
 import 'package:my_rent/constants/styles.dart';
+import 'package:my_rent/main.dart';
 import 'package:my_rent/register_signin_sections/authentication/authentication.dart';
 import 'package:my_rent/register_signin_sections/screen_signin.dart';
 import 'package:my_rent/screens/home/screen_home.dart';

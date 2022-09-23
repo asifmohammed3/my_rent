@@ -3,27 +3,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_rent/global_variables/global.dart';
 
 Future<void> updateRole() async {
-
   try {
     final result = await FirebaseFunctions.instance
         .httpsCallable('updateRole')
-        .call(tokenID);
+        .call(<String, dynamic>{
+      'roles': ['owner'],
+    });
+
+    print("update status : ${result.data}");
+    print("role updated");
   } on FirebaseFunctionsException catch (error) {
-    print(error.code);
-    print(error.details);
-    print(error.message);
+    print("roleupdaterr:  ${error.code}");
+    print(("roleupdaterr    ${error.details}"));
+    print(("roleupdaterr    ${error.message}"));
   }
 }
-
-// Future<void> processSignUp() async {
-
-//   try {
-//     final result = await FirebaseFunctions.instance
-//         .httpsCallable('processSignUp')
-//         .call(tokenID);
-//   } on FirebaseFunctionsException catch (error) {
-//     print(error.code);
-//     print(error.details);
-//     print(error.message);
-//   }
-// }

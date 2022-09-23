@@ -72,19 +72,20 @@ class _ScreenHomeState extends State<ScreenHome> {
             children: [
               CustSearchBar(),
               Padding(
-                  padding: EdgeInsets.only(top: 60),
-                  child: ListView.builder(
-                    itemCount: 1,
-                    itemBuilder: (context, index) {
-                      return PropertyTile(
-                        propertyName: "test property",
-                        branchLocation: "test location",
-                        numberOfUnits: "4",
-                        imageSrc:
-                            "https://www.nobroker.in/blog/wp-content/uploads/2021/03/buying-residential.jpg",
-                      );
-                    },
-                  )),
+                padding: EdgeInsets.only(top: 60),
+                child: ListView.builder(
+                  itemCount: 1,
+                  itemBuilder: (context, index) {
+                    return PropertyTile(
+                      propertyName: "test property",
+                      branchLocation: "test location",
+                      numberOfUnits: "4",
+                      imageSrc:
+                          "https://www.nobroker.in/blog/wp-content/uploads/2021/03/buying-residential.jpg",
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ));

@@ -261,7 +261,48 @@ class ScreenTenantsDetail extends StatelessWidget {
 
                           //CheckOut button w120 50
                           custElevatedButton(
-                              buttonName: Text("CheckOut"), onPressed: () {}),
+                              buttonName: Text("CheckOut"),
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext builderContext) {
+                                      return AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(18.0))),
+                                        title: Center(
+                                            child: Column(
+                                          children: [
+                                            Icon(
+                                              Icons.warning_amber_rounded,
+                                              size: 150,
+                                              color: textFieldwhite,
+                                            ),
+                                            Text(
+                                              ' Are You Sure ?',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: pieChartEmptyColor,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ],
+                                        )),
+                                        content: ListView(
+                                          shrinkWrap: true,
+                                          children: [
+                                            custElevatedButton(
+                                                onPressed: () {},
+                                                buttonName: Text("Check Out")),
+                                            custElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                buttonName: Text("Cancel")),
+                                          ],
+                                        ),
+                                      );
+                                    });
+                              }),
                         ],
                       ),
                       //Unit button w250 50

@@ -76,8 +76,6 @@ class PropertyCarousalSlider extends StatefulWidget {
 }
 
 class _PropertyCarousalSliderState extends State<PropertyCarousalSlider> {
-
-  
   bool propertyTileselection = false;
 
   @override

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'dart:math' as math;
 import 'dart:async';
 import 'package:my_rent/constants/color_constants.dart';
@@ -19,43 +20,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   // updateRole();
-  //   // processSignUp();
-  //   // print("called cloud function");
-
-  //   // Timer(Duration(seconds: 2), () {
-  //   //   FirebaseAuth.instance.authStateChanges().listen((user) {
-  //   //     if (user == null) {
-  //   //       print('User is currently signed out!');
-  //   //       Navigator.pushAndRemoveUntil(
-  //   //           context,
-  //   //           MaterialPageRoute(builder: (_) => ScreenOnboarding()),
-  //   //           (route) => false);
-  //   //     } else {
-  //   //       print('User is signed in!');
-  //   //       // print(FirebaseAuth.instance.currentUser!.getIdToken());
-  //   //       updateToken(user.getIdToken());
-  //   //       // tokenID = user.getIdToken();
-
-  //   //       Navigator.pushAndRemoveUntil(
-  //   //           context,
-  //   //           MaterialPageRoute(builder: (_) => ScreenMainPage()),
-  //   //           (route) => false);
-  //   //     }
-  //   //   });
-  //   // });
-  // }
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    Timer(
-        Duration(seconds: 2),
-        () => Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (BuildContext context) => Wrapper())));
+    Timer(Duration(seconds: 2), () => wrapper(context));
     return Scaffold(
       body: Stack(
         children: [
@@ -110,4 +82,20 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
+}
+
+wrapper(context) {
+  return FirebaseAuth.instance.authStateChanges().listen((user) async {
+    if (user == null) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return ScreenOnboarding();
+      }));
+      print('routed to onboardscreen');
+    } else {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return ScreenMainPage();
+      }));
+      print('routed to main screen');
+    }
+  });
 }
