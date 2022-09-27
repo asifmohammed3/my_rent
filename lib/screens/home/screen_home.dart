@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:my_rent/constants/color_constants.dart';
 import 'package:my_rent/register_signin_sections/authentication/authentication.dart';
 import 'package:my_rent/register_signin_sections/screen_signin.dart';
@@ -73,16 +75,51 @@ class _ScreenHomeState extends State<ScreenHome> {
               CustSearchBar(),
               Padding(
                 padding: EdgeInsets.only(top: 60),
-                child: ListView.builder(
-                  itemCount: 1,
-                  itemBuilder: (context, index) {
-                    return PropertyTile(
-                      propertyName: "test property",
-                      branchLocation: "test location",
-                      numberOfUnits: "4",
-                      imageSrc:
-                          "https://www.nobroker.in/blog/wp-content/uploads/2021/03/buying-residential.jpg",
-                    );
+                child: Query(
+                  options: QueryOptions(
+                    fetchPolicy: FetchPolicy.cacheAndNetwork,
+
+                    document: gql(
+                        getOwnerDetails), // this is the query string you just created
+                    variables: {
+                      "user_Id": "1111",
+                    },
+                  ),
+                  // Just like in apollo refetch() could be used to manually trigger a refetch
+                  // while fetchMore() can be used for pagination purpose
+                  builder: (QueryResult result,
+                      {VoidCallback? refetch, FetchMore? fetchMore}) {
+                    if (result.hasException) {
+                      return Text(result.exception.toString());
+                    }
+
+                    if (result.isLoading) {
+                      return const Text('Loading');
+                    }
+
+                    var repositories = result.data;
+
+                    if (repositories == null) {
+                      return const Text('No repositories');
+                    }
+
+                    print(repositories);
+
+                    print(repositories.runtimeType);
+
+                    return Center(child: Text(repositories.toString()));
+                    // ListView.builder(
+                    //       itemCount: 1,
+                    //       itemBuilder: (context, index) {
+                    //         return PropertyTile(
+                    //           propertyName: "test property",
+                    //           branchLocation: "test location",
+                    //           numberOfUnits: "4",
+                    //           imageSrc:
+                    //               "https://www.nobroker.in/blog/wp-content/uploads/2021/03/buying-residential.jpg",
+                    //         );
+                    //       },
+                    //     );
                   },
                 ),
               ),
@@ -91,3 +128,13 @@ class _ScreenHomeState extends State<ScreenHome> {
         ));
   }
 }
+
+const String getOwnerDetails = """
+  query GET_OWNER_DETAILS(\$user_Id: String) {
+  owner_details(where: {uid: {_eq: \$user_Id}}){
+    business_name,
+    business_type,
+    address
+  }
+}
+""";

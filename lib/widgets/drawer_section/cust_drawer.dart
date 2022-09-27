@@ -73,11 +73,8 @@ class CustDrawer extends StatelessWidget {
                       tileName: "Log Out",
                       icon: Icons.logout,
                       onTap: () {
+                        Navigator.pop(context);
                         signOut();
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => ScreenSignIn()),
-                            (Route<dynamic> route) => false);
                       }),
                 ],
               ),

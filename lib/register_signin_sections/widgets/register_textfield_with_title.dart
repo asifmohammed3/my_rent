@@ -1,24 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:my_rent/constants/color_constants.dart';
 
-class RegisterTextfield extends StatelessWidget {
+class RegisterTextfield extends StatefulWidget {
    RegisterTextfield(
       {Key? key,
       required this.controller,
       required this.title,
+      this.validator,
+      this.onChanged,
       this.maxLines = 1})
       : super(key: key);
+      String? Function(String?)? validator;
+      void Function(String)? onChanged;
   final TextEditingController controller;
   final String title;
   final int maxLines;
+
+  @override
+  State<RegisterTextfield> createState() => _RegisterTextfieldState();
+}
+
+class _RegisterTextfieldState extends State<RegisterTextfield> {
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      // validator: validator,
-      controller: controller,
-      maxLines: maxLines,
+      onChanged: widget.onChanged,
+       validator: widget.validator,
+      controller: widget.controller,
+      maxLines: widget.maxLines,
       decoration: InputDecoration(
-        labelText: title,
+        labelText: widget.title,
         floatingLabelAlignment: FloatingLabelAlignment.start,
         floatingLabelStyle: TextStyle(color: customBlue),
         alignLabelWithHint: true,

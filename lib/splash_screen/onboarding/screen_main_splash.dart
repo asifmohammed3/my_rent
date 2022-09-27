@@ -9,6 +9,7 @@ import 'package:my_rent/constants/styles.dart';
 import 'package:my_rent/firebase/functions.dart';
 import 'package:my_rent/global_variables/global.dart';
 import 'package:my_rent/main.dart';
+import 'package:my_rent/register_signin_sections/authentication/authentication.dart';
 import 'package:my_rent/screens/screen_main_page.dart';
 import 'package:my_rent/splash_screen/onboarding/screen_onboarding.dart';
 
@@ -27,7 +28,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 2), () => wrapper(context));
     return Scaffold(
       body: Stack(
         children: [
@@ -84,18 +84,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-wrapper(context) {
-  return FirebaseAuth.instance.authStateChanges().listen((user) async {
-    if (user == null) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-        return ScreenOnboarding();
-      }));
-      print('routed to onboardscreen');
-    } else {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-        return ScreenMainPage();
-      }));
-      print('routed to main screen');
-    }
-  });
+class wrapper extends StatelessWidget {
+  const wrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
 }

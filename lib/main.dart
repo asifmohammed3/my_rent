@@ -8,6 +8,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_rent/firebase_options.dart';
 import 'package:my_rent/global_variables/global.dart';
 import 'package:my_rent/gql_client.dart';
+import 'package:my_rent/register_signin_sections/screen_register_next.dart';
 import 'package:my_rent/register_signin_sections/screen_signin.dart';
 import 'package:my_rent/screens/screen_main_page.dart';
 import 'package:my_rent/splash_screen/onboarding/screen_main_splash.dart';
@@ -19,26 +20,40 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // String token = await FirebaseAuth.instance.currentUser!.getIdToken();
+  //   print(token.toString());
+
+  //   print(JwtDecoder.decode(token));
+
+  FirebaseAuth.instance.idTokenChanges().listen((user) async {
+    print("ID changed");
+    if (user == null) {
+      print('User is currently signed out!');
+    } else {
+      await user.getIdToken().then((String token) {
+        tokenID = token;
+        print(tokenID);
+      });
+    }
+  });
+
   ValueNotifier<GraphQLClient> client = ValueNotifier(
     GraphQLClient(
+      cache: GraphQLCache(store: InMemoryStore()),
       link: link,
-      // The default store is the InMemoryStore, which does NOT persist to disk
-      cache: GraphQLCache(),
     ),
   );
 
-
-  
-
-  
-  runApp(MyApp(
+  runApp(GraphQLProvider(
     client: client,
+    child: MyApp(),
   ));
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({Key? key, required this.client}) : super(key: key);
-  ValueNotifier<GraphQLClient> client;
+  MyApp({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -48,21 +63,29 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    
   }
 
   @override
   Widget build(BuildContext context) {
-    return GraphQLProvider(
-      client: widget.client,
-      child: MaterialApp(
-        title: 'My Rent',
-        theme: ThemeData(
-          backgroundColor: Color.fromARGB(255, 0, 0, 0),
-          scaffoldBackgroundColor: Color.fromARGB(255, 245, 245, 245),
-        ),
-        home: SplashScreen(),
+    return MaterialApp(
+      title: 'My Rent',
+      theme: ThemeData(
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        scaffoldBackgroundColor: Color.fromARGB(255, 245, 245, 245),
       ),
+      home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, userSnapshot) {
+            if (userSnapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            }
+            // return ScreenRegisterNext();
+            if (userSnapshot.hasData) {
+              return ScreenMainPage();
+            } else {
+              return ScreenOnboarding();
+            }
+          }),
     );
   }
 }

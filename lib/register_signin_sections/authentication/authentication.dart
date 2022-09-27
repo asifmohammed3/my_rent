@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -10,32 +12,21 @@ import 'package:my_rent/main.dart';
 import 'package:my_rent/screens/screen_main_page.dart';
 
 Future<bool> signUp(String emailAddress, String password) async {
-  bool isSuccess=false;
+  bool isSuccess = false;
   try {
-    final credential =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: emailAddress,
       password: password,
     );
-    await updateRole();
-    FirebaseAuth.instance.authStateChanges().listen((user) async {
-    if (user == null) {
-      print('User is currently signed out!!!!!');
-      tokenID = null;
-      print(tokenID);
-    } else {
-      print('User is signed in!!!!');
-      dynamic tokenResult = await user.getIdToken(true);
 
-      tokenID = tokenResult;
-      // print(tokenResult);
+    Future.delayed(Duration(seconds: 2), () async {
+      await updateRole();
+    });
+    String token = await FirebaseAuth.instance.currentUser!.getIdToken(true);
+    print(token.toString());
+    tokenID = token;
 
-      Map<String, dynamic> decodedToken = JwtDecoder.decode(tokenID);
-      // print(tokenID);
-      print(decodedToken);
-    }
-  });
-    // print(JwtDecoder.decode(tokenID));
+    print(JwtDecoder.decode(token));
 
     isSuccess = true;
   } on FirebaseAuthException catch (e) {
@@ -95,4 +86,5 @@ Future<bool> signIn(String emailAddress, String password) async {
 
 signOut() async {
   await FirebaseAuth.instance.signOut();
+  tokenID = "";
 }

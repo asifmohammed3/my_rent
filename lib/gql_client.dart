@@ -1,15 +1,34 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_rent/global_variables/global.dart';
 
-final HttpLink httpLink = HttpLink(
-    'http://ec2-15-207-18-21.ap-south-1.compute.amazonaws.com/v1/graphql',
-    defaultHeaders:  <String, String>{
-      'x-hasura-admin-secret': 'myRent12',
-    },
+HttpLink httpLink = HttpLink(
+  'http://ec2-15-207-18-21.ap-south-1.compute.amazonaws.com/v1/graphql',
+  // defaultHeaders: <String, String>{
+  //   'Authorization':
+  //       'Bearer ${() async => await FirebaseAuth.instance.currentUser!.getIdToken()}',
+  //   //'x-hasura-admin-secret': 'myRent12'
+  // },
+);
 
-  );
-  final AuthLink authLink = AuthLink(
-    getToken: () => 'Bearer $tokenID',
-  );
+Future get _token async {
+  return await FirebaseAuth.instance.currentUser!.getIdToken();
+}
 
-  final Link link = authLink.concat(httpLink);
+final AuthLink authLink = AuthLink(
+  getToken: () async {
+    final token = await _token;
+   
+   
+    print("token  " + JwtDecoder.decode(token).toString());
+     print("tokenID  " +JwtDecoder.decode(tokenID).toString());
+
+    return 'Bearer $tokenID';
+  },
+  // OR
+  // getToken: () => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
+);
+
+final Link link = authLink.concat(httpLink);
