@@ -21,7 +21,9 @@ class ScreenAddMultiUnitProperty extends StatelessWidget {
       options: MutationOptions(
         document: gql(ADD_PROPERTY), // this is the mutation string you just created
         // you can update the cache based on results
-        
+        variables: {                              'no_of_rooms': noOfRoomController.text,
+                              'property_name': propertyNameController.text,
+                              'address': addressController.text,},
         // or do something with the result.data on completion
         onCompleted: (dynamic resultData) {
           print(resultData);
@@ -63,9 +65,7 @@ class ScreenAddMultiUnitProperty extends StatelessWidget {
                 RoundedElevatedButton(
                   onPressed: () {
                      runMutation({
-                              'no_of_rooms': noOfRoomController.text,
-                              'property_name': propertyNameController.text,
-                              'address': addressController.text,
+                              
                             });
 
                   },

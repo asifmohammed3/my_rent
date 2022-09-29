@@ -13,16 +13,13 @@ HttpLink httpLink = HttpLink(
   // },
 );
 
-Future get _token async {
-  return await FirebaseAuth.instance.currentUser!.getIdToken();
-}
+
 
 final AuthLink authLink = AuthLink(
   getToken: () async {
-    final token = await _token;
    
    
-    print("token  " + JwtDecoder.decode(token).toString());
+   
      print("tokenID  " +JwtDecoder.decode(tokenID).toString());
 
     return 'Bearer $tokenID';

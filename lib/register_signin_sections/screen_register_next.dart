@@ -5,6 +5,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:my_rent/constants/color_constants.dart';
 import 'package:my_rent/main.dart';
 import 'package:my_rent/register_signin_sections/screen_signin.dart';
+import 'package:my_rent/register_signin_sections/widgets/country_dropdown.dart';
 import 'package:my_rent/register_signin_sections/widgets/register_textfield_with_title.dart';
 import 'package:my_rent/widgets/cust_elevatedbutton.dart';
 import 'package:my_rent/widgets/cust_subtitle.dart';
@@ -21,22 +22,24 @@ class ScreenRegisterNext extends StatefulWidget {
 class _ScreenRegisterNextState extends State<ScreenRegisterNext> {
   final _regFormKey = GlobalKey<FormState>();
   TextEditingController businessNameController = TextEditingController();
-
-  TextEditingController contactNumController = TextEditingController();
-
   TextEditingController businessTypeController = TextEditingController();
-
   TextEditingController addressController = TextEditingController();
+
+  
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return Mutation(
         options: MutationOptions(
-            document: gql(addBusinessDetails),
-            onCompleted: (dynamic resultData) {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyApp()));
-            }),
+          document: gql(addBusinessDetails),
+          // onCompleted: (dynamic resultData) {
+          //   Navigator.push(
+          //       context, MaterialPageRoute(builder: (context) => MyApp()));
+          // }
+        ),
         builder: (runMutation, result) {
           return SafeArea(
             child: Scaffold(
@@ -57,9 +60,8 @@ class _ScreenRegisterNextState extends State<ScreenRegisterNext> {
                             ],
                           ),
                           Container(
-                            height: 350,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child: ListView(
+                              shrinkWrap: true,
                               children: [
                                 RegisterTextfield(
                                   controller: businessNameController,
@@ -74,19 +76,8 @@ class _ScreenRegisterNextState extends State<ScreenRegisterNext> {
                                   },
                                 ),
                                 //impliment dropdown for country and currency
-          
-                                RegisterTextfield(
-                                  controller: contactNumController,
-                                  title: "Contact No.",
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return ("Enter Contact Number");
-                                    }
-                                  },
-                                  onChanged: (value) {
-                                    _regFormKey.currentState!.validate();
-                                  },
-                                ),
+                                CountrySearchDropdown(),
+                                
                                 RegisterTextfield(
                                   controller: businessTypeController,
                                   title: "Business Type",
@@ -115,8 +106,8 @@ class _ScreenRegisterNextState extends State<ScreenRegisterNext> {
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: customBlue, width: 2),
+                                      borderSide: BorderSide(
+                                          color: customBlue, width: 2),
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                   ),
@@ -133,19 +124,19 @@ class _ScreenRegisterNextState extends State<ScreenRegisterNext> {
                     custElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                  return MyApp();
-                })));
-                        //  if(_regFormKey.currentState!.validate()) {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: ((context) {
+                            return MyApp();
+                          })));
+                          //  if(_regFormKey.currentState!.validate()) {
                           // runMutation({
                           //     'address': addressController.text,
                           //     'business_name': businessNameController.text,
                           //     'business_type': businessTypeController.text,
-                          //     'country': ,
-                          //     'currency': ,
+                          //     'country': "",
+                          //     'currency': "",
                           //   });
-                        //  }
-                           
+                          //  }
                         },
                         buttonName: Text("Register"))
                   ]),

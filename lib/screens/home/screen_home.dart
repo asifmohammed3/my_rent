@@ -6,6 +6,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:my_rent/constants/color_constants.dart';
 import 'package:my_rent/register_signin_sections/authentication/authentication.dart';
 import 'package:my_rent/register_signin_sections/screen_signin.dart';
+import 'package:my_rent/register_signin_sections/widgets/country_dropdown.dart';
 import 'package:my_rent/screens/home/add_property_section/add_property_popup.dart';
 import 'package:my_rent/screens/home/screen_unit_list.dart/screen_unit_list.dart';
 import 'package:my_rent/screens/home/widgets/property_tile.dart';
@@ -24,6 +25,11 @@ class ScreenHome extends StatefulWidget {
 
 class _ScreenHomeState extends State<ScreenHome> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,9 +87,6 @@ class _ScreenHomeState extends State<ScreenHome> {
 
                     document: gql(
                         getOwnerDetails), // this is the query string you just created
-                    variables: {
-                      "user_Id": "1111",
-                    },
                   ),
                   // Just like in apollo refetch() could be used to manually trigger a refetch
                   // while fetchMore() can be used for pagination purpose

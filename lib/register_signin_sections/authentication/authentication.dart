@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,16 +19,16 @@ Future<bool> signUp(String emailAddress, String password) async {
       email: emailAddress,
       password: password,
     );
-
-    Future.delayed(Duration(seconds: 2), () async {
+    Future.delayed(Duration(seconds: 1), () async {
       await updateRole();
-    });
-    String token = await FirebaseAuth.instance.currentUser!.getIdToken(true);
-    print(token.toString());
-    tokenID = token;
+     });
+      tokenID = await FirebaseAuth.instance.currentUser!.getIdToken(true);
+    print(tokenID.toString());
 
-    print(JwtDecoder.decode(token));
-
+    print(JwtDecoder.decode(tokenID));
+   
+     
+   
     isSuccess = true;
   } on FirebaseAuthException catch (e) {
     Fluttertoast.showToast(
@@ -66,6 +67,9 @@ Future<bool> signIn(String emailAddress, String password) async {
   try {
     final credential = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: emailAddress, password: password);
+
+      
+  
     isSuccess = true;
   } on FirebaseAuthException catch (e) {
     Fluttertoast.showToast(

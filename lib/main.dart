@@ -74,10 +74,13 @@ class _MyAppState extends State<MyApp> {
         scaffoldBackgroundColor: Color.fromARGB(255, 245, 245, 245),
       ),
       home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
+          stream: FirebaseAuth.instance.userChanges(),
           builder: (context, userSnapshot) {
             if (userSnapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return  Center(
+                      child: CircularProgressIndicator(
+                value: 20,
+              ));
             }
             // return ScreenRegisterNext();
             if (userSnapshot.hasData) {
@@ -89,3 +92,5 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+

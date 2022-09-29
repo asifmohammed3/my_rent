@@ -49,14 +49,15 @@ class _ScreenRegisterState extends State<ScreenRegister> {
             onPressed: (() async {
               _formKey.currentState!.validate();
               if (passwordController.text == passConfirmController.text) {
-                if (await signUp(emailController.text, passwordController.text)) {
-    
-                                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ScreenRegisterNext();
-                    }));
+                if (await signUp(
+                    emailController.text, passwordController.text)) {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) {
+                    return ScreenRegisterNext();
+                  }));
                 }
               }
+              setState(() {});
             }),
           ),
         ),
@@ -137,11 +138,12 @@ class _ScreenRegisterState extends State<ScreenRegister> {
                               return ("Please Enter Your Email");
                             }
                             // reg expression for email validation
-                            if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                            if (!RegExp(
+                                    "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
                                 .hasMatch(value)) {
                               return ("Please Enter a valid email");
                             }
-    
+
                             return null;
                           },
                         ),

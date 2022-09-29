@@ -12,9 +12,14 @@ import 'package:my_rent/screens/screen_main_page.dart';
 import 'package:my_rent/screens/screen_staff_list/screen_staff_list.dart';
 import 'package:my_rent/widgets/drawer_section/components/drawer_header_section.dart';
 
-class CustDrawer extends StatelessWidget {
+class CustDrawer extends StatefulWidget {
   const CustDrawer({Key? key}) : super(key: key);
 
+  @override
+  State<CustDrawer> createState() => _CustDrawerState();
+}
+
+class _CustDrawerState extends State<CustDrawer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -74,7 +79,10 @@ class CustDrawer extends StatelessWidget {
                       icon: Icons.logout,
                       onTap: () {
                         Navigator.pop(context);
-                        signOut();
+                        setState(() {
+                          signOut();
+                        });
+                        
                       }),
                 ],
               ),

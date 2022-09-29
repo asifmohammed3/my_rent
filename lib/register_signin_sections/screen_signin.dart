@@ -1,9 +1,13 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'dart:math' as math;
 
 import 'package:my_rent/constants/color_constants.dart';
+import 'package:my_rent/global_variables/global.dart';
+import 'package:my_rent/main.dart';
 import 'package:my_rent/register_signin_sections/authentication/authentication.dart';
 import 'package:my_rent/register_signin_sections/screen_register.dart';
 import 'package:my_rent/register_signin_sections/widgets/sign_up_in_textfield.dart';
@@ -41,12 +45,19 @@ class _ScreenSignInState extends State<ScreenSignIn> {
           backgroundColor: customBlue,
           onPressed: (() async {
             _formKey.currentState!.validate();
-            if (await signIn(emailController.text, passwordController.text)) {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return ScreenMainPage();
-              }));
-            }
+            await signIn(emailController.text, passwordController.text);
+            
+            var token = await FirebaseAuth.instance.currentUser!.getIdToken();
+            Navigator.pop(context);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: ((context) {
+                            return MyApp();
+                          })));
+
+            
+            setState(()  {
+              tokenID = token.toString();
+            });
           }),
         ),
       ),
