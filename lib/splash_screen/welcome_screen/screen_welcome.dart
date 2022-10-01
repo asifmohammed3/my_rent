@@ -80,7 +80,7 @@ class ScreenWelcome extends StatelessWidget {
                         onPressed: () {
                           Navigator.pushReplacement(context,
                               MaterialPageRoute(builder: (context) {
-                            return ScreenPropVehSelection();
+                            return ScreenSignIn();
                           }));
                         },
                         buttonName: Text(

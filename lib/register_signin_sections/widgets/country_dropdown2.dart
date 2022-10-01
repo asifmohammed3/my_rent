@@ -21,15 +21,15 @@ class CountrySearchDropdown extends StatefulWidget {
 }
 
 class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
-  // final countryPhoneFormKey = GlobalKey<FormState>();
+  final countryPhoneFormKey = GlobalKey<FormState>();
 
   TextEditingController codeController = TextEditingController();
   TextEditingController contactNumController = TextEditingController();
 
   TextEditingController currencyController = TextEditingController();
-  int countryId = 0;
   String selectedItem = "";
   String countryCode = '';
+
   String currency = "";
 
   List countryDetails = [];
@@ -66,7 +66,7 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
         }
 
         return Form(
-          // key: countryPhoneFormKey,
+          key: countryPhoneFormKey,
           child: Column(
             children: [
               Row(
@@ -103,7 +103,7 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
                         onChanged: (v) {
                           selectedItem = v!;
                           List data = getcodeAndCurrency(list, selectedItem,
-                              countryDetails, countryCode, countryId, currency);
+                              countryDetails, countryCode, currency);
 
                           // getcodeAndCurrency(list, selectedItem, countryDetails,
                           //     currency, countryCode);
@@ -113,10 +113,10 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
                             codeController.text = data[1];
                           });
                           widget.ondataChanged([
-                           countryId,
-                          selectedItem,
-                          codeController.text,
-                          contactNumController.text,
+                            selectedItem,
+                            codeController.text,
+                            contactNumController.text,
+                            currencyController.text
                           ]);
                           print(v);
                         },
@@ -151,14 +151,14 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
                         }
                       },
                       onChanged: (value) {
-                        // countryPhoneFormKey.currentState!.validate();
+                        countryPhoneFormKey.currentState!.validate();
 
                         setState(() {});
                         widget.ondataChanged([
-                          countryId,
                           selectedItem,
                           codeController.text,
                           contactNumController.text,
+                          currencyController.text
                         ]);
                       },
                     ),
@@ -174,8 +174,7 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
   }
 }
 
-getcodeAndCurrency(
-    list, selectedItem, countryDetails, countryCode, countryId, currency) {
+getcodeAndCurrency(list, selectedItem, countryDetails, countryCode, currency) {
   for (var countryData in list) {
     (countryData as Map<String, dynamic>).forEach((key, value) {
       if (value == selectedItem) {
@@ -186,11 +185,6 @@ getcodeAndCurrency(
           }
           if (element.key == "dial") {
             countryCode = element.value.toString();
-
-            print(element.value);
-          }
-          if (element.key == "id") {
-            countryId = element.value.toString();
 
             print(element.value);
           }

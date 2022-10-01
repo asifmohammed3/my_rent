@@ -11,7 +11,7 @@ class ScreenAddMultiUnitProperty extends StatelessWidget {
 
   TextEditingController propertyNameController = TextEditingController();
   TextEditingController noOfRoomController = TextEditingController();
-    TextEditingController addressController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
 //TODO upload img  (not a text field)
 
@@ -19,11 +19,14 @@ class ScreenAddMultiUnitProperty extends StatelessWidget {
   Widget build(BuildContext context) {
     return Mutation(
       options: MutationOptions(
-        document: gql(ADD_PROPERTY), // this is the mutation string you just created
+        document:
+            gql(ADD_PROPERTY), // this is the mutation string you just created
         // you can update the cache based on results
-        variables: {                              'no_of_rooms': noOfRoomController.text,
-                              'property_name': propertyNameController.text,
-                              'address': addressController.text,},
+        // variables: {
+        //   'no_of_rooms': noOfRoomController.text,
+        //   'property_name': propertyNameController.text,
+        //   'address': addressController.text,
+        // },
         // or do something with the result.data on completion
         onCompleted: (dynamic resultData) {
           print(resultData);
@@ -56,7 +59,7 @@ class ScreenAddMultiUnitProperty extends StatelessWidget {
                     CustTextFieldContainer(
                         textFieldName: "No. of Rooms",
                         controller: noOfRoomController),
-                        CustTextFieldContainer(
+                    CustTextFieldContainer(
                         textFieldName: "Address",
                         controller: addressController),
                   ]),
@@ -64,10 +67,11 @@ class ScreenAddMultiUnitProperty extends StatelessWidget {
                 //------Add button------
                 RoundedElevatedButton(
                   onPressed: () {
-                     runMutation({
-                              
-                            });
-
+                    runMutation({
+                      'no_of_rooms': noOfRoomController.text,
+                      'property_name': propertyNameController.text,
+                      'address': addressController.text,
+                    });
                   },
                   buttonTitle: "Add",
                   buttonColor: bottomNavYellow,
@@ -82,7 +86,8 @@ class ScreenAddMultiUnitProperty extends StatelessWidget {
   }
 }
 
-String ADD_PROPERTY = """mutation ADD_PROPERTY(\$no_of_rooms: Int , \$property_name: String , \$address : String ) {
+String ADD_PROPERTY =
+    """mutation ADD_PROPERTY(\$no_of_rooms: Int , \$property_name: String , \$address : String ) {
   insert_property_owner_one(object: {property: {data: {no_of_rooms: \$no_of_rooms, property_name: \$property_name, address : \$address}}}) {
     property {
       id

@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -13,6 +15,7 @@ import 'package:my_rent/register_signin_sections/screen_signin.dart';
 import 'package:my_rent/screens/screen_main_page.dart';
 import 'package:my_rent/splash_screen/onboarding/screen_main_splash.dart';
 import 'package:my_rent/splash_screen/onboarding/screen_onboarding.dart';
+import 'package:my_rent/splash_screen/select_prop_or_veh/screen_select_prop_or_veh.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,23 +34,25 @@ void main() async {
       print('User is currently signed out!');
     } else {
       await user.getIdToken().then((String token) {
+        print('User is currently signed in!');
+
         tokenID = token;
         print(tokenID);
+        print(JwtDecoder.decode(tokenID));
       });
     }
   });
 
-  ValueNotifier<GraphQLClient> client = ValueNotifier(
-    GraphQLClient(
-      cache: GraphQLCache(store: InMemoryStore()),
-      link: link,
-    ),
-  );
-
+  ValueNotifier<GraphQLClient> client = GraphQLConfig.graphInit();
   runApp(GraphQLProvider(
-    client: client,
-    child: MyApp(),
-  ));
+      client: client,
+      child: MaterialApp(
+          title: 'My Rent',
+          theme: ThemeData(
+            backgroundColor: Color.fromARGB(255, 0, 0, 0),
+            scaffoldBackgroundColor: Color.fromARGB(255, 245, 245, 245),
+          ),
+          home: SplashScreen())));
 }
 
 class MyApp extends StatefulWidget {
@@ -67,30 +72,23 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My Rent',
-      theme: ThemeData(
-        backgroundColor: Color.fromARGB(255, 0, 0, 0),
-        scaffoldBackgroundColor: Color.fromARGB(255, 245, 245, 245),
-      ),
-      home: StreamBuilder(
-          stream: FirebaseAuth.instance.userChanges(),
-          builder: (context, userSnapshot) {
-            if (userSnapshot.connectionState == ConnectionState.waiting) {
-              return  Center(
-                      child: CircularProgressIndicator(
-                value: 20,
-              ));
-            }
-            // return ScreenRegisterNext();
-            if (userSnapshot.hasData) {
-              return ScreenMainPage();
-            } else {
-              return ScreenOnboarding();
-            }
-          }),
-    );
+    return StreamBuilder(
+        stream: FirebaseAuth.instance.userChanges(),
+        builder: (context, userSnapshot) {
+          if (userSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: CircularProgressIndicator(
+              value: 20,
+            ));
+          }
+          // return ScreenMainPage();
+
+          // return ScreenRegisterNext();
+          if (userSnapshot.hasData) {
+            return ScreenMainPage();
+          } else {
+            return ScreenOnboarding();
+          }
+        });
   }
 }
-
-

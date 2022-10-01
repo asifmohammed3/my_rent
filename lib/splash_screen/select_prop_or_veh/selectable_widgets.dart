@@ -14,11 +14,11 @@ class SelectableWidget extends StatefulWidget {
 }
 
 class _SelectableWidgetState extends State<SelectableWidget> {
-  Decoration _unSelecteddecoration = BoxDecoration(
+  final Decoration _unSelecteddecoration = BoxDecoration(
     border: Border.all(color: Colors.black, width: 0.5),
     borderRadius: BorderRadius.all(Radius.circular(20)),
   );
-  Decoration _selectedDecoration = BoxDecoration(
+  final Decoration _selectedDecoration = BoxDecoration(
     border: Border.all(color: customBlue, width: 2),
     borderRadius: BorderRadius.all(Radius.circular(20)),
   );
@@ -62,9 +62,11 @@ class _SelectableWidgetState extends State<SelectableWidget> {
                   ),
                   //ontap container
                   onTap: () {
-                    propertySelected = !propertySelected;
+                    
                     print("property :${propertySelected}");
-                    setState(() {});
+                    setState(() {
+                      propertySelected = !propertySelected;
+                    });
                   },
                 ),
                 propertySelected

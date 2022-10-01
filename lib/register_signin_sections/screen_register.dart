@@ -1,9 +1,11 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 import 'package:my_rent/constants/color_constants.dart';
+import 'package:my_rent/global_variables/global.dart';
 import 'package:my_rent/main.dart';
 import 'package:my_rent/register_signin_sections/authentication/authentication.dart';
 import 'package:my_rent/register_signin_sections/screen_register_next.dart';
@@ -11,6 +13,7 @@ import 'package:my_rent/register_signin_sections/screen_signin.dart';
 import 'package:my_rent/register_signin_sections/widgets/sign_up_in_textfield.dart';
 import 'package:my_rent/screens/screen_main_page.dart';
 import 'package:my_rent/splash_screen/onboarding/screen_main_splash.dart';
+import 'package:my_rent/splash_screen/select_prop_or_veh/screen_select_prop_or_veh.dart';
 import 'package:my_rent/widgets/cust_elevatedbutton.dart';
 import 'package:my_rent/widgets/cust_subtitle.dart';
 import 'package:my_rent/widgets/cust_textbutton.dart';
@@ -47,17 +50,30 @@ class _ScreenRegisterState extends State<ScreenRegister> {
             ),
             backgroundColor: customBlue,
             onPressed: (() async {
-              _formKey.currentState!.validate();
-              if (passwordController.text == passConfirmController.text) {
-                if (await signUp(
-                    emailController.text, passwordController.text)) {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) {
-                    return ScreenRegisterNext();
-                  }));
+              try {
+                _formKey.currentState!.validate();
+                if (passwordController.text == passConfirmController.text) {
+                  if (await signUp(
+                      emailController.text, passwordController.text)) {
+                    // tokenID =
+                    //     await FirebaseAuth.instance.currentUser!.getIdToken(true);
+                    // print(tokenID.toString());
+
+                    // print(JwtDecoder.decode(tokenID));
+                    // Navigator.pushReplacement(context,
+                    //     MaterialPageRoute(builder: (context) {
+                    //   return ScreenRegisterNext();
+                    // }));
+                    // await signOut();
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ScreenPropVehSelection();
+                    }));
+                  }
                 }
+              } catch (e) {
+                print(e);
               }
-              setState(() {});
             }),
           ),
         ),

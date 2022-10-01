@@ -19,17 +19,10 @@ Future<bool> signUp(String emailAddress, String password) async {
       email: emailAddress,
       password: password,
     );
-    Future.delayed(Duration(seconds: 1), () async {
+    Future.delayed(Duration(seconds: 2), () async {
       await updateRole();
-     });
-      tokenID = await FirebaseAuth.instance.currentUser!.getIdToken(true);
-    print(tokenID.toString());
-
-    print(JwtDecoder.decode(tokenID));
-   
-     
-   
-    isSuccess = true;
+    });
+    isSuccess = await _getFutureBool();
   } on FirebaseAuthException catch (e) {
     Fluttertoast.showToast(
         msg: e.message!,
@@ -57,7 +50,7 @@ Future<bool> signUp(String emailAddress, String password) async {
     }
   } catch (e) {
     isSuccess = false;
-    print(e);
+    print("SIGNUP ERR" + e.toString());
   }
   return isSuccess;
 }
@@ -67,10 +60,11 @@ Future<bool> signIn(String emailAddress, String password) async {
   try {
     final credential = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: emailAddress, password: password);
-
-      
-  
-    isSuccess = true;
+    if (credential.user != null) {
+      isSuccess = true;
+    } else {
+      isSuccess = false;
+    }
   } on FirebaseAuthException catch (e) {
     Fluttertoast.showToast(
         msg: e.message!,
@@ -91,4 +85,16 @@ Future<bool> signIn(String emailAddress, String password) async {
 signOut() async {
   await FirebaseAuth.instance.signOut();
   tokenID = "";
+}
+
+Future<bool> _getFutureBool() {
+  return Future.delayed(const Duration(seconds: 3), () async {
+    tokenID = await FirebaseAuth.instance.currentUser!.getIdToken(true);
+    print(tokenID.toString());
+
+    print(JwtDecoder.decode(tokenID));
+    print("signup true");
+
+    return true;
+  });
 }

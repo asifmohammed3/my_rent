@@ -77,11 +77,11 @@ class _CustDrawerState extends State<CustDrawer> {
                   DrawerTile(
                       tileName: "Log Out",
                       icon: Icons.logout,
-                      onTap: () {
+                      onTap: () async {
                         Navigator.pop(context);
-                        setState(() {
-                          signOut();
-                        });
+                        
+                          await signOut();
+                      setState(() {  });
                         
                       }),
                 ],

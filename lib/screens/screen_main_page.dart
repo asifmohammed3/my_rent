@@ -30,7 +30,7 @@ class ScreenMain extends StatelessWidget {
   ScreenMain({Key? key}) : super(key: key);
 
   final _pages = [
-    //WidgetTest(),
+    // WidgetTest(),
     ScreenHome(),
     ScreenTenents(),
     ScreenPropertyOverviewMain(),

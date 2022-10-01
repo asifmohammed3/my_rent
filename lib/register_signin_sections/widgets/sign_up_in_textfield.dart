@@ -18,6 +18,7 @@ class SignUpInTextField extends StatelessWidget {
   bool obscureText;
   String hintText;
   TextEditingController controller = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
     return Container(

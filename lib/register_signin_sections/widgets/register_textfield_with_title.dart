@@ -4,11 +4,13 @@ import 'package:my_rent/constants/color_constants.dart';
 class RegisterTextfield extends StatefulWidget {
   RegisterTextfield(
       {Key? key,
+      this.keyboardType,
+      this.textAlign = TextAlign.start,
       required this.controller,
       required this.title,
       this.validator,
       this.onChanged,
-      this.readOnly= false,
+      this.readOnly = false,
       this.maxLines = 1})
       : super(key: key);
   String? Function(String?)? validator;
@@ -16,8 +18,9 @@ class RegisterTextfield extends StatefulWidget {
   final TextEditingController controller;
   final String title;
   final int maxLines;
-  bool readOnly ;
-
+  bool readOnly;
+  TextAlign textAlign;
+  TextInputType? keyboardType;
   @override
   State<RegisterTextfield> createState() => _RegisterTextfieldState();
 }
@@ -26,7 +29,9 @@ class _RegisterTextfieldState extends State<RegisterTextfield> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      readOnly:widget.readOnly,
+      keyboardType: widget.keyboardType,
+      textAlign: widget.textAlign,
+      readOnly: widget.readOnly,
       onChanged: widget.onChanged,
       validator: widget.validator,
       controller: widget.controller,
