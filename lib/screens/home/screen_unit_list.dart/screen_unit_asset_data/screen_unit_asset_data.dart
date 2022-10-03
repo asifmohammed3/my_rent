@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_rent/constants/color_constants.dart';
+import 'package:my_rent/screens/home/screen_unit_list.dart/screen_unit_asset_data/widgets/add_unit_popup.dart';
 import 'package:my_rent/screens/home/screen_unit_list.dart/screen_unit_asset_data/widgets/unit_asset_tile.dart';
 import 'package:my_rent/widgets/cust_elevatedbutton.dart';
 import 'package:my_rent/widgets/cust_subtitle.dart';
@@ -35,7 +36,10 @@ class ScreenUnitAssetData extends StatelessWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+
+              showAddUnitPopup(context);
+            },
             backgroundColor: customBlue,
             child: Icon(
               Icons.add,

@@ -27,9 +27,7 @@ class _ScreenHomeState extends State<ScreenHome> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
-  void initState() {
-    
-  }
+  void initState() {}
 
   @override
   Widget build(BuildContext context) {
@@ -86,10 +84,8 @@ class _ScreenHomeState extends State<ScreenHome> {
                     fetchPolicy: FetchPolicy.cacheAndNetwork,
 
                     document: gql(
-                        getOwnerDetails), // this is the query string you just created
+                        LIST_PROPERTIES), // this is the query string you just created
                   ),
-                  // Just like in apollo refetch() could be used to manually trigger a refetch
-                  // while fetchMore() can be used for pagination purpose
                   builder: (QueryResult result,
                       {VoidCallback? refetch, FetchMore? fetchMore}) {
                     if (result.hasException) {
@@ -97,7 +93,9 @@ class _ScreenHomeState extends State<ScreenHome> {
                     }
 
                     if (result.isLoading) {
-                      return const Text('Loading');
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
 
                     var repositories = result.data;
@@ -105,24 +103,25 @@ class _ScreenHomeState extends State<ScreenHome> {
                     if (repositories == null) {
                       return const Text('No repositories');
                     }
+                    print(repositories);
+                    List<dynamic> list = result.data!["property"];
 
                     print(repositories);
 
                     print(repositories.runtimeType);
 
-                    return Center(child: Text(repositories.toString()));
-                    // ListView.builder(
-                    //       itemCount: 1,
-                    //       itemBuilder: (context, index) {
-                    //         return PropertyTile(
-                    //           propertyName: "test property",
-                    //           branchLocation: "test location",
-                    //           numberOfUnits: "4",
-                    //           imageSrc:
-                    //               "https://www.nobroker.in/blog/wp-content/uploads/2021/03/buying-residential.jpg",
-                    //         );
-                    //       },
-                    //     );
+                    return ListView.builder(
+                      itemCount: list.length,
+                      itemBuilder: (context, index) {
+                        return PropertyTile(
+                          propertyName: list[index]["property_name"],
+                          branchLocation: list[index]["address"],
+                          numberOfUnits: list[index]["no_of_rooms"].toString(),
+                          imageSrc:
+                              "https://www.nobroker.in/blog/wp-content/uploads/2021/03/buying-residential.jpg",
+                        );
+                      },
+                    );
                   },
                 ),
               ),
@@ -132,12 +131,13 @@ class _ScreenHomeState extends State<ScreenHome> {
   }
 }
 
-const String getOwnerDetails = """
-  query GET_OWNER_DETAILS(\$user_Id: String) {
-  owner_details(where: {uid: {_eq: \$user_Id}}){
-    business_name,
-    business_type,
+const String LIST_PROPERTIES = """
+  query LIST_PROPERTIES {
+  property{
+    property_name
+    no_of_rooms
     address
   }
 }
+
 """;
