@@ -11,6 +11,7 @@ import 'package:my_rent/register_signin_sections/screen_signin.dart';
 import 'package:my_rent/register_signin_sections/widgets/sign_up_in_textfield.dart';
 import 'package:my_rent/screens/screen_main_page.dart';
 import 'package:my_rent/splash_screen/onboarding/screen_main_splash.dart';
+import 'package:my_rent/splash_screen/select_prop_or_veh/screen_select_prop_or_veh.dart';
 import 'package:my_rent/widgets/cust_elevatedbutton.dart';
 import 'package:my_rent/widgets/cust_subtitle.dart';
 import 'package:my_rent/widgets/cust_textbutton.dart';
@@ -53,7 +54,7 @@ class _ScreenRegisterState extends State<ScreenRegister> {
                     emailController.text, passwordController.text)) {
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) {
-                    return ScreenRegisterNext();
+                    return ScreenPropVehSelection();
                   }));
                 }
               }

@@ -10,20 +10,28 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:my_rent/register_signin_sections/widgets/country_dropdown.dart';
 import 'package:my_rent/register_signin_sections/widgets/register_textfield_with_title.dart';
 
+typedef dataCallBack = void Function(List data);
+
 class CountrySearchDropdown extends StatefulWidget {
-  const CountrySearchDropdown({super.key});
+  const CountrySearchDropdown({super.key, required this.ondataChanged});
+  final dataCallBack ondataChanged;
 
   @override
   State<CountrySearchDropdown> createState() => _CountrySearchDropdownState();
 }
 
 class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
-  TextEditingController countryController = TextEditingController();
+  // final countryPhoneFormKey = GlobalKey<FormState>();
+
   TextEditingController codeController = TextEditingController();
   TextEditingController contactNumController = TextEditingController();
 
   TextEditingController currencyController = TextEditingController();
+  int countryId = 0;
   String selectedItem = "";
+  String countryCode = '';
+  String currency = "";
+
   List countryDetails = [];
   String query = "";
   List<String> countryNames = [];
@@ -46,7 +54,7 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
         }
 
         if (result.isLoading) {
-          return const Text('Loading');
+          return Center(child: const Text('Loading'));
         }
         List<dynamic> list = result.data!["countries"];
         for (var countryData in list) {
@@ -56,85 +64,109 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
             }
           });
         }
-        getcodeAndCurrency(list, selectedItem, countryDetails);
-        print(countryDetails);
-        return Column(
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Expanded(
-                    flex: 1,
-                    child: RegisterTextfield(
-                      readOnly: true,
-                      controller: currencyController,
-                      title: "Currency",
-                    )),
-                Expanded(
-                  flex: 3,
-                  child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: DropdownSearch<String>(
-                      popupProps: PopupProps.menu(
-                        errorBuilder: (context, searchEntry, exception) =>
-                            Text("Something went wrong"),
-                        showSearchBox: true,
-                        // searchFieldProps:
-                        //     TextFieldProps(,),
-                        showSelectedItems: true,
-                      ),
-                      items: countryNames,
-                      dropdownDecoratorProps: DropDownDecoratorProps(
-                        dropdownSearchDecoration: InputDecoration(
-                          labelText: "Country",
-                          hintText: "Select your country",
-                        ),
-                      ),
-                      onChanged: (v) {
-                        setState(() {
-                          selectedItem = v!;
-                          getcodeAndCurrency(
-                              list, selectedItem, countryDetails);
-                        });
 
-                        print(v);
-                      },
-                      selectedItem: selectedItem,
+        return Form(
+          // key: countryPhoneFormKey,
+          child: Column(
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Expanded(
+                      flex: 1,
+                      child: RegisterTextfield(
+                        textAlign: TextAlign.center,
+                        readOnly: true,
+                        controller: currencyController,
+                        title: "Currency",
+                      )),
+                  Expanded(
+                    flex: 3,
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: DropdownSearch<String>(
+                        popupProps: PopupProps.menu(
+                          errorBuilder: (context, searchEntry, exception) =>
+                              Text("Something went wrong"),
+                          showSearchBox: true,
+                          // searchFieldProps:
+                          //     TextFieldProps(,),
+                          showSelectedItems: true,
+                        ),
+                        items: countryNames,
+                        dropdownDecoratorProps: DropDownDecoratorProps(
+                          dropdownSearchDecoration: InputDecoration(
+                            labelText: "Country",
+                            hintText: "Select your country",
+                          ),
+                        ),
+                        onChanged: (v) {
+                          selectedItem = v!;
+                          List data = getcodeAndCurrency(list, selectedItem,
+                              countryDetails, countryCode, countryId, currency);
+
+                          // getcodeAndCurrency(list, selectedItem, countryDetails,
+                          //     currency, countryCode);
+
+                          setState(() {
+                            currencyController.text = data[3];
+                            codeController.text = data[1];
+                          });
+                          widget.ondataChanged([
+                           countryId,
+                          selectedItem,
+                          codeController.text,
+                          contactNumController.text,
+                          ]);
+                          print(v);
+                        },
+                        selectedItem: selectedItem,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                    flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RegisterTextfield(
-                        readOnly: true,
-                        controller: codeController,
-                        title: "",
-                      ),
-                    )),
-                Expanded(
-                  flex: 3,
-                  child: RegisterTextfield(
-                    controller: contactNumController,
-                    title: "Contact No.",
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return ("Enter Contact Number");
-                      }
-                    },
-                    onChanged: (value) {
-                      //  widget._regFormKey.currentState!.validate();
-                    },
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RegisterTextfield(
+                          readOnly: true,
+                          textAlign: TextAlign.center,
+                          controller: codeController,
+                          title: "",
+                        ),
+                      )),
+                  Expanded(
+                    flex: 3,
+                    child: RegisterTextfield(
+                      keyboardType: TextInputType.phone,
+                      controller: contactNumController,
+                      title: "Contact No.",
+                      validator: (value) {
+                        if (value!.isEmpty || value == "") {
+                          return ("Enter Contact Number");
+                        }
+                      },
+                      onChanged: (value) {
+                        // countryPhoneFormKey.currentState!.validate();
+
+                        setState(() {});
+                        widget.ondataChanged([
+                          countryId,
+                          selectedItem,
+                          codeController.text,
+                          contactNumController.text,
+                        ]);
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         );
       },
     );
@@ -142,17 +174,31 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
   }
 }
 
+getcodeAndCurrency(
+    list, selectedItem, countryDetails, countryCode, countryId, currency) {
+  for (var countryData in list) {
+    (countryData as Map<String, dynamic>).forEach((key, value) {
+      if (value == selectedItem) {
+        (countryData.entries.forEach((element) {
+          if (element.key == "currency") {
+            currency = element.value.toString();
+            print(element.value);
+          }
+          if (element.key == "dial") {
+            countryCode = element.value.toString();
 
-List samp = [];
-getcodeAndCurrency(list, selectedItem, countryDetails) {
-  list.forEach((countryData) {
-    (countryData as Map<String, dynamic>)
-        .entries
-        .where((e) => e.value == selectedItem)
-        .forEach((element) {
-      print(element);
+            print(element.value);
+          }
+          if (element.key == "id") {
+            countryId = element.value.toString();
+
+            print(element.value);
+          }
+        }));
+      }
     });
-  });
+  }
+  return [selectedItem, countryCode, countryDetails, currency];
 }
 
 String GET_COUNTRY_LIST = """query GET_COUNTRY_LIST(\$filter_by: String ) {
