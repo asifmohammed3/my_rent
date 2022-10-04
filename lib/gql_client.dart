@@ -14,10 +14,9 @@ HttpLink httpLink = HttpLink(
 );
 
 
-
 final AuthLink authLink = AuthLink(
   getToken: () async {
-         tokenID = await FirebaseAuth.instance.currentUser!.getIdToken(true);
+         tokenID = await FirebaseAuth.instance.currentUser!.getIdToken();
 
    
    

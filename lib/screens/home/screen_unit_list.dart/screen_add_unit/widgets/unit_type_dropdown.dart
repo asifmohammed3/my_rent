@@ -1,104 +1,88 @@
+import 'dart:convert';
+
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_rent/constants/color_constants.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:my_rent/register_signin_sections/widgets/country_dropdown.dart';
+import 'package:my_rent/register_signin_sections/widgets/register_textfield_with_title.dart';
 
-ValueNotifier<int> addUnitTypeNotifier = ValueNotifier<int>(0);
+typedef dataCallBack = void Function(String data);
 
-class AddUnitTypeDropDown extends StatefulWidget {
-  AddUnitTypeDropDown({
-    Key? key,
-  }) : super(key: key);
+class unitItemDropdown extends StatefulWidget {
+  const unitItemDropdown({super.key, required this.ondataChanged});
+  final dataCallBack ondataChanged;
 
   @override
-  State<AddUnitTypeDropDown> createState() => _DropdownWidgetState();
+  State<unitItemDropdown> createState() => _CountrySearchDropdownState();
 }
 
-class _DropdownWidgetState extends State<AddUnitTypeDropDown> {
-  // Initial Selected Value
-  String dropdownvalue = 'Accomodate';
+class _CountrySearchDropdownState extends State<unitItemDropdown> {
+  // final countryPhoneFormKey = GlobalKey<FormState>();
 
-  // List of items in our dropdown menu
-  var items = [
-    'Accomodate',
-    'Showroom',
-    'Store',
-  ];
+  List<String> unitTypes = [];
 
   @override
   Widget build(BuildContext context) {
-    var kWidth = MediaQuery.of(context).size.width;
-    var kHeight = MediaQuery.of(context).size.height;
-    return SizedBox(
-      width: kWidth,
-      child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-        SizedBox(
-          width: 100,
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: Text(
-                    maxLines: 2,
-                    softWrap: false,
-                    overflow: TextOverflow.ellipsis,
-                    "Type",
-                    style: TextStyle(fontSize: 13, color: customBlue),
-                  ),
-                ),
-                Text(":")
-              ],
+    return Query(
+      options: QueryOptions(
+        fetchPolicy: FetchPolicy.cacheAndNetwork,
+        document: gql(getUnitTypes),
+      ),
+      builder: (QueryResult result,
+          {VoidCallback? refetch, FetchMore? fetchMore}) {
+        if (result.hasException) {
+          print(result.exception.toString());
+          return Text(result.exception.toString());
+        }
+
+        if (result.isLoading) {
+          return Center(child: const Text('Loading'));
+        }
+        List<dynamic> list = result.data!["unit_types"];
+        print(result.data);
+        for (var countryData in list) {
+          (countryData as Map<String, dynamic>).forEach((key, value) {
+            if (key == "type") {
+              unitTypes.add(value);
+            }
+          });
+        }
+        print(unitTypes);
+
+        return DropdownSearch<String>(
+            popupProps: PopupProps.menu(
+              errorBuilder: (context, searchEntry, exception) =>
+                  Text("Something went wrong"),
+              showSearchBox: true,
+              showSelectedItems: false,
             ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Container(
-            margin: EdgeInsets.all(10),
-            child: SizedBox(
-              width: 120,
-              child: Container(
-                child: DropdownButton(
-                  // Initial Value
-                  value: dropdownvalue,
-                  underline: SizedBox(), elevation: 50,
-                  // dropdownColor: Color.fromARGB(240, 14, 76, 149),
-
-                  borderRadius: BorderRadius.circular(15),
-
-                  // Down Arrow Icon
-                  icon: const Icon(
-                    Icons.keyboard_arrow_down,
-                    // color: Colors.white,
-                  ),
-
-                  // Array list of items
-                  items: items.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      enabled: true,
-                      child: Text(
-                        items,
-                        // style: TextStyle(color: Colors.white),
-                      ),
-                    );
-                  }).toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropdownvalue = newValue!;
-                      addUnitTypeNotifier.value = items.indexOf(dropdownvalue);
-
-                      //refresh app to change vehicle part and prop
-                    });
-                  },
-                ),
+            items: unitTypes,
+            dropdownDecoratorProps: DropDownDecoratorProps(
+              dropdownSearchDecoration: InputDecoration(
+                labelText: "Type",
+                hintText: "Select Unit type",
               ),
             ),
-          ),
-        )
-      ]),
+            onChanged: (v) {
+              var selectedItem = v!;
+              widget.ondataChanged(
+                selectedItem,
+              );
+              print(v);
+            });
+      },
     );
   }
 }
+
+String getUnitTypes = """query UNIT_TYPES {
+  unit_types {
+    type
+    description
+  }
+}
+""";

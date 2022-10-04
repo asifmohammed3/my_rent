@@ -17,6 +17,10 @@ class ScreenAddUnit extends StatefulWidget {
 }
 
 class _ScreenAddUnitState extends State<ScreenAddUnit> {
+
+String selectedDropDownItem="";
+
+
   //controllers for ACCOMODATE type
   TextEditingController accomodateBhkController = TextEditingController();
   TextEditingController accomodateRoomNameController = TextEditingController();
@@ -46,17 +50,16 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
             title: "Add Unit",
           ),
         ),
-        body: ValueListenableBuilder(
-            valueListenable: addUnitTypeNotifier,
-            builder: (context, index, _) {
-              if (index == 0) {
-                return Column(
+        body: Column(
                   children: [
                     //-------Accomodate textfields-------
                     Container(
                       height: MediaQuery.of(context).size.height * 0.7,
                       margin: EdgeInsets.all(10),
                       child: ListView(children: [
+                        unitItemDropdown(ondataChanged: (newId) {
+                                selectedDropDownItem = newId;
+                              },),
                         CustTextFieldContainer(
                           textFieldName: "BHK",
                           controller: accomodateBhkController,
@@ -80,74 +83,7 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
                       borderRadius: 12,
                     )
                   ],
-                );
-              } else if (index == 1) {
-                return Column(
-                  children: [
-                    //-------showroom textfields-------
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.7,
-                      margin: EdgeInsets.all(10),
-                      child: ListView(children: [
-                        AddUnitTypeDropDown(),
-                        CustTextFieldContainer(
-                          textFieldName: "Area",
-                          controller: showroomAreaController,
-                        ),
-                        CustTextFieldContainer(
-                            textFieldName: "Room Name",
-                            controller: showroomRoomNameController),
-                        CustTextFieldContainer(
-                            textFieldName: "Floor No",
-                            controller: showroomFloorNoController),
-                        CustTextFieldContainer(
-                            textFieldName: "Room No",
-                            controller: showroomRoomNoController),
-                      ]),
-                    ),
-                    //------submit button------
-                    RoundedElevatedButton(
-                      onPressed: () {},
-                      buttonTitle: "Next",
-                      borderRadius: 12,
-                    )
-                  ],
-                );
-              } else if (index == 2) {
-                return Column(
-                  children: [
-                    //-------Store textfields-------
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.7,
-                      margin: EdgeInsets.all(10),
-                      child: ListView(children: [
-                        AddUnitTypeDropDown(),
-                        CustTextFieldContainer(
-                          textFieldName: "Area",
-                          controller: storeAreaController,
-                        ),
-                        CustTextFieldContainer(
-                            textFieldName: "Room Name",
-                            controller: storeRoomNameController),
-                        CustTextFieldContainer(
-                            textFieldName: "Floor No",
-                            controller: storeFloorNoController),
-                        CustTextFieldContainer(
-                            textFieldName: "Room No",
-                            controller: storeRoomNoController),
-                      ]),
-                    ),
-                    //------submit button------
-                    RoundedElevatedButton(
-                      onPressed: () {},
-                      buttonTitle: "Next",
-                      borderRadius: 12,
-                    )
-                  ],
-                );
-              }
-              return Center(child: Text("Somethink went wrong"));
-            }),
+                ),
       ),
     );
   }

@@ -41,7 +41,6 @@ class _ScreenHomeState extends State<ScreenUnitList> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: scaffoldWhite,
-        key: _scaffoldKey,
         drawer: const PreferredSize(
             preferredSize: Size.fromHeight(50.0), child: CustDrawer()),
         appBar: CustAppBar(
@@ -63,24 +62,19 @@ class _ScreenHomeState extends State<ScreenUnitList> {
                   return ScreenAddUnit();
                 })));
               },
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Center(
-                  child: Row(children: const [
-                    Icon(
-                      Icons.add,
-                      size: 21,
-                    ),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    Text(
-                      "Add Unit",
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    )
-                  ]),
+              child: Row(children: const [
+                Icon(
+                  Icons.add,
+                  size: 21,
                 ),
-              ),
+                SizedBox(
+                  width: 3,
+                ),
+                Text(
+                  "Add Unit",
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                )
+              ]),
             ),
           ),
         ),
@@ -126,15 +120,11 @@ class _ScreenHomeState extends State<ScreenUnitList> {
   }
 }
 
-
-
-
 //add unit
 
-String addPropertyUnit=r""" mutation ADD_PROPERTY_UNIT($area: Int, $bhk: Int, $floor_no: Int, $property_id: uuid, $room_name: String , $room_no: Int, $type: unit_types_enum) {
+String addPropertyUnit =
+    r""" mutation ADD_PROPERTY_UNIT($area: Int, $bhk: Int, $floor_no: Int, $property_id: uuid, $room_name: String , $room_no: Int, $type: unit_types_enum) {
   insert_property_unit_one(object: {area: $area, bhk: $bhk, floor_no: $floor_no, property_id: $property_id, room_name: $room_name, room_no: $room_no, type: $type}){
     id
   }
 } """;
-
-

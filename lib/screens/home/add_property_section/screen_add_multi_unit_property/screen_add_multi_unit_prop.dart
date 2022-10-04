@@ -24,14 +24,11 @@ class ScreenAddMultiUnitProperty extends StatefulWidget {
 class _ScreenAddMultiUnitPropertyState
     extends State<ScreenAddMultiUnitProperty> {
   TextEditingController propertyNameController = TextEditingController();
-  TextEditingController noOfRoomController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   final storageRef = FirebaseStorage.instance.ref();
   var id = "";
   String imgName = "";
   File? imageFile;
-
-  var result;
 
   Future pickImage() async {
     try {
@@ -48,7 +45,7 @@ class _ScreenAddMultiUnitPropertyState
     }
   }
 
-  Future uploadImage() async {
+  Future<bool> uploadImage() async {
     try {
       print(imgName);
       final imagesRef = storageRef.child(imgName);
@@ -59,7 +56,10 @@ class _ScreenAddMultiUnitPropertyState
           SettableMetadata(
               contentType: "image/jpeg",
               customMetadata: {"propertyId": "$id"}));
+
+      return true;
     } catch (e) {
+      return false;
       print('Failed $e');
     }
   }
@@ -78,6 +78,7 @@ class _ScreenAddMultiUnitPropertyState
 
         onCompleted: (dynamic resultData) {
           id = resultData["insert_property_owner_one"]["property"]["id"];
+          print(id);
           print(resultData["insert_property_owner_one"]["property"]["id"]);
           uploadImage();
         },
@@ -106,9 +107,7 @@ class _ScreenAddMultiUnitPropertyState
                       textFieldName: "Property Name",
                       controller: propertyNameController,
                     ),
-                    CustTextFieldContainer(
-                        textFieldName: "No. of Rooms",
-                        controller: noOfRoomController),
+
                     CustTextFieldContainer(
                         textFieldName: "Address",
                         controller: addressController),
@@ -124,14 +123,11 @@ class _ScreenAddMultiUnitPropertyState
                 ),
                 //------Add button------
                 RoundedElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     runMutation({
-                      'no_of_rooms': noOfRoomController.text,
                       'property_name': propertyNameController.text,
                       'address': addressController.text,
                     });
-
-                    // uploadImage();
                   },
                   buttonTitle: "Add",
                   buttonColor: bottomNavYellow,
@@ -147,12 +143,11 @@ class _ScreenAddMultiUnitPropertyState
 }
 
 String ADD_PROPERTY =
-    r"""mutation ADD_PROPERTY($no_of_rooms: Int, $property_name: String , $address: String ) {
-  insert_property_owner_one(object: {property: {data: {no_of_rooms: $no_of_rooms, property_name: $property_name, address: $address}}}){
+    r"""mutation ADD_PROPERTY( $property_name: String , $address: String ) {
+  insert_property_owner_one(object: {property: {data: {property_name: $property_name, address: $address}}}){
     property{
       id
     }
   }
 }
-
 """;
