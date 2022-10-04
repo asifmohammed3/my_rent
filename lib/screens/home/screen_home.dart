@@ -8,6 +8,7 @@ import 'package:my_rent/register_signin_sections/authentication/authentication.d
 import 'package:my_rent/register_signin_sections/screen_signin.dart';
 import 'package:my_rent/register_signin_sections/widgets/country_dropdown.dart';
 import 'package:my_rent/screens/home/add_property_section/add_property_popup.dart';
+import 'package:my_rent/screens/home/add_property_section/screen_add_multi_unit_property/screen_add_multi_unit_prop.dart';
 import 'package:my_rent/screens/home/screen_unit_list.dart/screen_unit_list.dart';
 import 'package:my_rent/screens/home/widgets/property_tile.dart';
 import 'package:my_rent/widgets/cust_appbar.dart';
@@ -25,9 +26,6 @@ class ScreenHome extends StatefulWidget {
 
 class _ScreenHomeState extends State<ScreenHome> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {}
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +49,9 @@ class _ScreenHomeState extends State<ScreenHome> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18)),
               onPressed: () {
-                showAddropertyPopup(context);
+                Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                  return ScreenAddMultiUnitProperty();
+                })));
               },
               child: Padding(
                 padding: const EdgeInsets.all(4.0),
@@ -135,7 +135,6 @@ const String LIST_PROPERTIES = """
   query LIST_PROPERTIES {
   property{
     property_name
-    no_of_rooms
     address
   }
 }

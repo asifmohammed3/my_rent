@@ -64,7 +64,6 @@ class _ScreenAddMultiUnitPropertyState
     }
   }
 
-//TODO upload img  (not a text field)
   @override
   Widget build(BuildContext context) {
     var kWidth = MediaQuery.of(context).size.width;
@@ -155,7 +154,5 @@ String ADD_PROPERTY =
     }
   }
 }
-
-
 
 """;

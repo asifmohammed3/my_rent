@@ -35,7 +35,6 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
   TextEditingController storeFloorNoController = TextEditingController();
   TextEditingController storeRoomNoController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -58,7 +57,6 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
                       height: MediaQuery.of(context).size.height * 0.7,
                       margin: EdgeInsets.all(10),
                       child: ListView(children: [
-                        AddUnitTypeDropDown(),
                         CustTextFieldContainer(
                           textFieldName: "BHK",
                           controller: accomodateBhkController,
@@ -154,4 +152,3 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
     );
   }
 }
-

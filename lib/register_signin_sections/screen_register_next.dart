@@ -117,18 +117,19 @@ class ScreenRegisterNext extends StatelessWidget {
                       ],
                     ),
                   ),
-                 const  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   custElevatedButton(
                       onPressed: () {
+                        print(dataOfDropdownSec);
                         runMutation({
                           "address": addressController.text,
                           "business_name": businessNameController.text,
                           "business_type": businessTypeController.text,
                           "allowed_features": selectedOptions.toString(),
                           "phone": dataOfDropdownSec[2].toString() +
-                              dataOfDropdownSec[3].toString(), 
+                              dataOfDropdownSec[3].toString(),
                           "country_id": dataOfDropdownSec[0],
                         });
 

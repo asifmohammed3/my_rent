@@ -85,43 +85,48 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
                     child: Padding(
                       padding: EdgeInsets.all(20.0),
                       child: DropdownSearch<String>(
-                        popupProps: PopupProps.menu(
-                          errorBuilder: (context, searchEntry, exception) =>
-                              Text("Something went wrong"),
-                          showSearchBox: true,
-                          // searchFieldProps:
-                          //     TextFieldProps(,),
-                          showSelectedItems: true,
-                        ),
-                        items: countryNames,
-                        dropdownDecoratorProps: DropDownDecoratorProps(
-                          dropdownSearchDecoration: InputDecoration(
-                            labelText: "Country",
-                            hintText: "Select your country",
+                          popupProps: PopupProps.menu(
+                            errorBuilder: (context, searchEntry, exception) =>
+                                Text("Something went wrong"),
+                            showSearchBox: true,
+                            // searchFieldProps:
+                            //     TextFieldProps(,),
+                            showSelectedItems: true,
                           ),
-                        ),
-                        onChanged: (v) {
-                          selectedItem = v!;
-                          List data = getcodeAndCurrency(list, selectedItem,
-                              countryDetails, countryCode, countryId, currency);
+                          items: countryNames,
+                          dropdownDecoratorProps: DropDownDecoratorProps(
+                            dropdownSearchDecoration: InputDecoration(
+                              labelText: "Country",
+                              hintText: "Select your country",
+                            ),
+                          ),
+                          onChanged: (v) {
+                            selectedItem = v!;
+                            List data = getcodeAndCurrency(
+                                list,
+                                selectedItem,
+                                countryDetails,
+                                countryCode,
+                                countryId,
+                                currency);
 
-                          // getcodeAndCurrency(list, selectedItem, countryDetails,
-                          //     currency, countryCode);
+                            // getcodeAndCurrency(list, selectedItem, countryDetails,
+                            //     currency, countryCode);
 
-                          setState(() {
-                            currencyController.text = data[3];
-                            codeController.text = data[1];
-                          });
-                          widget.ondataChanged([
-                           countryId,
-                          selectedItem,
-                          codeController.text,
-                          contactNumController.text,
-                          ]);
-                          print(v);
-                        },
-                        selectedItem: selectedItem,
-                      ),
+                            setState(() {
+                              currencyController.text = data[3];
+                              codeController.text = data[1];
+                            });
+                            widget.ondataChanged([
+                              countryId,
+                              selectedItem,
+                              codeController.text,
+                              contactNumController.text,
+                            ]);
+                            print(v);
+                            selectedItem:
+                            selectedItem;
+                          }),
                     ),
                   ),
                 ],
@@ -170,7 +175,6 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
         );
       },
     );
-    ;
   }
 }
 

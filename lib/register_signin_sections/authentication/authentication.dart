@@ -22,8 +22,7 @@ Future<bool> signUp(String emailAddress, String password) async {
     Future.delayed(Duration(seconds: 1), () async {
       await updateRole();
      });
-      tokenID = await FirebaseAuth.instance.currentUser!.getIdToken(true);
-    print(tokenID.toString());
+      
 
     print(JwtDecoder.decode(tokenID));
    

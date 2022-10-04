@@ -125,3 +125,16 @@ class _ScreenHomeState extends State<ScreenUnitList> {
     );
   }
 }
+
+
+
+
+//add unit
+
+String addPropertyUnit=r""" mutation ADD_PROPERTY_UNIT($area: Int, $bhk: Int, $floor_no: Int, $property_id: uuid, $room_name: String , $room_no: Int, $type: unit_types_enum) {
+  insert_property_unit_one(object: {area: $area, bhk: $bhk, floor_no: $floor_no, property_id: $property_id, room_name: $room_name, room_no: $room_no, type: $type}){
+    id
+  }
+} """;
+
+

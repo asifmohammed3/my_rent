@@ -77,8 +77,8 @@ class _MyAppState extends State<MyApp> {
           stream: FirebaseAuth.instance.userChanges(),
           builder: (context, userSnapshot) {
             if (userSnapshot.connectionState == ConnectionState.waiting) {
-              return  Center(
-                      child: CircularProgressIndicator(
+              return Center(
+                  child: CircularProgressIndicator(
                 value: 20,
               ));
             }
@@ -92,5 +92,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-
