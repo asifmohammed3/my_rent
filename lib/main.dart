@@ -10,6 +10,7 @@ import 'package:my_rent/global_variables/global.dart';
 import 'package:my_rent/gql_client.dart';
 import 'package:my_rent/register_signin_sections/screen_register_next.dart';
 import 'package:my_rent/register_signin_sections/screen_signin.dart';
+import 'package:my_rent/screens/home/screen_unit_list.dart/screen_add_unit/screen_add_unit.dart';
 import 'package:my_rent/screens/screen_main_page.dart';
 import 'package:my_rent/splash_screen/onboarding/screen_main_splash.dart';
 import 'package:my_rent/splash_screen/onboarding/screen_onboarding.dart';
@@ -46,7 +47,13 @@ void main() async {
 
   runApp(GraphQLProvider(
     client: client,
-    child: MyApp(),
+    child: MaterialApp(
+        title: 'My Rent',
+        theme: ThemeData(
+          backgroundColor: Color.fromARGB(255, 0, 0, 0),
+          scaffoldBackgroundColor: Color.fromARGB(255, 245, 245, 245),
+        ),
+        home: SplashScreen()),
   ));
 }
 
@@ -67,28 +74,18 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My Rent',
-      theme: ThemeData(
-        backgroundColor: Color.fromARGB(255, 0, 0, 0),
-        scaffoldBackgroundColor: Color.fromARGB(255, 245, 245, 245),
-      ),
-      home: StreamBuilder(
-          stream: FirebaseAuth.instance.userChanges(),
-          builder: (context, userSnapshot) {
-            if (userSnapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                  child: CircularProgressIndicator(
-                value: 20,
-              ));
-            }
-            // return ScreenRegisterNext();
-            if (userSnapshot.hasData) {
-              return ScreenMainPage();
-            } else {
-              return ScreenOnboarding();
-            }
-          }),
-    );
+    return StreamBuilder(
+        stream: FirebaseAuth.instance.userChanges(),
+        builder: (context, userSnapshot) {
+          if (userSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          // return ScreenRegisterNext();
+          if (userSnapshot.hasData) {
+            return ScreenMainPage();
+          } else {
+            return ScreenOnboarding();
+          }
+        });
   }
 }

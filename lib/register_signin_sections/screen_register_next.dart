@@ -11,23 +11,21 @@ import "package:my_rent/register_signin_sections/widgets/register_textfield_with
 import "package:my_rent/widgets/cust_elevatedbutton.dart";
 import "package:my_rent/widgets/cust_subtitle.dart";
 
-// class ScreenRegisterNext extends StatefulWidget {
-//   ScreenRegisterNext({
-//     Key? key,
-//     required this.selectedOptions,
-//   }) : super(key: key);
-//   List selectedOptions;
-//   @override
-//   State<ScreenRegisterNext> createState() => _ScreenRegisterNextState();
-// }
 
-class ScreenRegisterNext extends StatelessWidget {
+
+class ScreenRegisterNext extends StatefulWidget {
   ScreenRegisterNext({
     Key? key,
     required this.selectedOptions,
   }) : super(key: key);
 
   List selectedOptions;
+
+  @override
+  State<ScreenRegisterNext> createState() => _ScreenRegisterNextState();
+}
+
+class _ScreenRegisterNextState extends State<ScreenRegisterNext> {
   TextEditingController businessNameController = TextEditingController();
 
   TextEditingController contactNumController = TextEditingController();
@@ -127,7 +125,7 @@ class ScreenRegisterNext extends StatelessWidget {
                           "address": addressController.text,
                           "business_name": businessNameController.text,
                           "business_type": businessTypeController.text,
-                          "allowed_features": selectedOptions.toString(),
+                          "allowed_features": widget.selectedOptions.toString(),
                           "phone": dataOfDropdownSec[2].toString() +
                               dataOfDropdownSec[3].toString(),
                           "country_id": dataOfDropdownSec[0],

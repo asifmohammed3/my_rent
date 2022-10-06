@@ -42,28 +42,24 @@ class _CountrySearchDropdownState extends State<unitItemDropdown> {
         if (result.isLoading) {
           return Center(child: const Text('Loading'));
         }
-        List<dynamic> list = result.data!["unit_types"];
-        print(result.data);
-        for (var countryData in list) {
-          (countryData as Map<String, dynamic>).forEach((key, value) {
-            if (key == "type") {
-              unitTypes.add(value);
-            }
-          });
+        List list = result.data!["unit_types"];
+        unitTypes = [];
+        for (var i = 0; i < list.length; i++) {
+          unitTypes.add(list[i]["type"]);
         }
+        print(list);
         print(unitTypes);
 
         return DropdownSearch<String>(
             popupProps: PopupProps.menu(
               errorBuilder: (context, searchEntry, exception) =>
                   Text("Something went wrong"),
-              showSearchBox: true,
+              showSearchBox: false,
               showSelectedItems: false,
             ),
             items: unitTypes,
             dropdownDecoratorProps: DropDownDecoratorProps(
               dropdownSearchDecoration: InputDecoration(
-                labelText: "Type",
                 hintText: "Select Unit type",
               ),
             ),

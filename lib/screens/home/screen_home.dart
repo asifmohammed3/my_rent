@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:my_rent/constants/color_constants.dart';
+import 'package:my_rent/firebase/functions.dart';
 import 'package:my_rent/register_signin_sections/authentication/authentication.dart';
 import 'package:my_rent/register_signin_sections/screen_signin.dart';
 import 'package:my_rent/register_signin_sections/widgets/country_dropdown.dart';
@@ -108,18 +110,25 @@ class _ScreenHomeState extends State<ScreenHome> {
 
                     print(repositories);
 
-                    print(repositories.runtimeType);
-
                     return ListView.builder(
                       itemCount: list.length,
                       itemBuilder: (context, index) {
-                        return PropertyTile(
-                          propertyName: list[index]["property_name"],
-                          branchLocation: list[index]["address"],
-                          numberOfUnits: list[index]["no_of_rooms"].toString(),
-                          imageSrc:
-                              "https://www.nobroker.in/blog/wp-content/uploads/2021/03/buying-residential.jpg",
-                        );
+                        return FutureBuilder<String>(
+                            future: getImgUrl(
+                                list[index]["property_images"][0]["path"]),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<String> snapshot) {
+                              print(snapshot.data);
+                              return PropertyTile(
+                                  propertyName: list[index]["property_name"],
+                                  branchLocation: list[index]["address"],
+                                  propertyId: list[index]["id"],
+                                  numberOfUnits: list[index]
+                                              ["property_units_aggregate"]
+                                          ["aggregate"]["count"]
+                                      .toString(),
+                                  imageSrc: snapshot.data.toString());
+                            });
                       },
                     );
                   },
@@ -132,10 +141,19 @@ class _ScreenHomeState extends State<ScreenHome> {
 }
 
 const String LIST_PROPERTIES = """
-  query LIST_PROPERTIES {
-  property{
+  query LIST_PROPERTY {
+  property {
+    id
     property_name
     address
+    property_images {
+      path
+    }
+    property_units_aggregate {
+      aggregate {
+        count(columns: id)
+      }
+    }
   }
 }
 

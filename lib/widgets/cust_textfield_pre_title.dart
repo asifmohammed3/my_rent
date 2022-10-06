@@ -11,13 +11,19 @@ class CustTextFieldContainer extends StatelessWidget {
       this.textFieldHeight = 50,
       this.maxLines = 1,
       this.hintText = "",
-      required this.controller})
+      required this.controller,
+      this.validator,
+      this.keyboardType,this.onChanged})
       : super(key: key);
   String textFieldName;
+void Function(String)? onChanged;
+
   int maxLines;
   double textFieldHeight;
   String hintText;
   TextEditingController controller;
+  String? Function(String?)? validator;
+  TextInputType? keyboardType;
   @override
   Widget build(BuildContext context) {
     var kWidth = MediaQuery.of(context).size.width;
@@ -52,7 +58,9 @@ class CustTextFieldContainer extends StatelessWidget {
             width: 220,
             child: Padding(
               padding: const EdgeInsets.all(5.0),
-              child: TextField(
+              child: TextFormField(
+                onChanged:onChanged,
+                keyboardType: keyboardType,
                 controller: controller,
                 maxLines: maxLines,
                 decoration: InputDecoration(

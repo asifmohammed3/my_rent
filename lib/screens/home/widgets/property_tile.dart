@@ -9,13 +9,15 @@ class PropertyTile extends StatelessWidget {
       required this.propertyName,
       required this.branchLocation,
       this.numberOfUnits = "",
-      required this.imageSrc})
+      required this.imageSrc,
+      required this.propertyId})
       : super(key: key);
 
   String propertyName;
   String branchLocation;
   String numberOfUnits;
   String imageSrc;
+  String propertyId;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,7 +30,9 @@ class PropertyTile extends StatelessWidget {
             Navigator.push(
                 context,
                 (MaterialPageRoute(builder: (context) {
-                  return ScreenUnitList(propertyName: propertyName,branchLocation: branchLocation,);
+                  return ScreenUnitList(
+                    propertyId: propertyId,
+                  );
                 })));
           },
           child: Stack(
@@ -59,6 +63,7 @@ class PropertyTile extends StatelessWidget {
                   width: 110,
                   height: double.infinity,
                   decoration: BoxDecoration(
+                    color: scaffoldWhite,
                     image: DecorationImage(
                       image: NetworkImage(imageSrc),
                       fit: BoxFit.cover,
@@ -143,7 +148,7 @@ class PropertyTile extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 18.0),
                   child: Container(
-                      margin: EdgeInsets.only(left: 5, right: 5, bottom: 4),
+                      margin: EdgeInsets.only(left: 5, right: 5, bottom: 15),
                       // color: Colors.yellow,
                       width: 80,
                       height: 100,
@@ -159,24 +164,23 @@ class PropertyTile extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.only(top: 18.0, right: 5, bottom: 4),
+                  padding: const EdgeInsets.only(top: 5.0, right: 5, bottom: 4),
                   child: SizedBox(
                       width: 80, height: 100, child: PropertyUnitPieChart()),
                 ),
               ),
-              Align(
-                alignment: Alignment.topRight,
-                child: SizedBox(
-                    height: 2,
-                    child: IconButton(
-                        icon: const Icon(
-                          Icons.more_horiz,
-                          size: 25,
-                          color: pieChartEmptyColor,
-                        ),
-                        onPressed: () {})),
-              )
+              // Align(
+              //   alignment: Alignment.topRight,
+              //   child: SizedBox(
+              //       height: 2,
+              //       child: IconButton(
+              //           icon: const Icon(
+              //             Icons.more_horiz,
+              //             size: 25,
+              //             color: pieChartEmptyColor,
+              //           ),
+              //           onPressed: () {})),
+              // )
             ],
           ),
         ),
