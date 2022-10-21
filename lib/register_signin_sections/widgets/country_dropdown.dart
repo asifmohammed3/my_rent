@@ -31,8 +31,7 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
   String selectedItem = "";
   String countryCode = '';
   String currency = "";
-
-  List countryDetails = [];
+  List data = [];
   String query = "";
   List<String> countryNames = [];
 
@@ -102,10 +101,9 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
                           ),
                           onChanged: (v) {
                             selectedItem = v!;
-                            List data = getcodeAndCurrency(
+                            data = getcodeAndCurrency(
                                 list,
                                 selectedItem,
-                                countryDetails,
                                 countryCode,
                                 countryId,
                                 currency);
@@ -114,11 +112,11 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
                             //     currency, countryCode);
 
                             setState(() {
-                              currencyController.text = data[3];
+                              currencyController.text = data[2];
                               codeController.text = data[1];
                             });
                             widget.ondataChanged([
-                              countryId,
+                              data[3],
                               selectedItem,
                               codeController.text,
                               contactNumController.text,
@@ -158,9 +156,9 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
                       onChanged: (value) {
                         // countryPhoneFormKey.currentState!.validate();
 
-                        setState(() {});
+                        
                         widget.ondataChanged([
-                          countryId,
+                          data[3],
                           selectedItem,
                           codeController.text,
                           contactNumController.text,
@@ -179,30 +177,26 @@ class _CountrySearchDropdownState extends State<CountrySearchDropdown> {
 }
 
 getcodeAndCurrency(
-    list, selectedItem, countryDetails, countryCode, countryId, currency) {
+    list, selectedItem, countryCode, countryId, currency) {
   for (var countryData in list) {
     (countryData as Map<String, dynamic>).forEach((key, value) {
       if (value == selectedItem) {
         (countryData.entries.forEach((element) {
           if (element.key == "currency") {
             currency = element.value.toString();
-            print(element.value);
           }
           if (element.key == "dial") {
             countryCode = element.value.toString();
-
-            print(element.value);
           }
           if (element.key == "id") {
             countryId = element.value.toString();
-
-            print(element.value);
           }
         }));
       }
     });
   }
-  return [selectedItem, countryCode, countryDetails, currency];
+  print([selectedItem, countryCode, currency, countryId]);
+  return [selectedItem, countryCode, currency, countryId];
 }
 
 String GET_COUNTRY_LIST = """query GET_COUNTRY_LIST(\$filter_by: String ) {

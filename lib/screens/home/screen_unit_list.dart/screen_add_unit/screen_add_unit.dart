@@ -5,7 +5,9 @@ import 'package:my_rent/constants/color_constants.dart';
 import 'package:my_rent/global_variables/global.dart';
 
 import 'package:flutter/material.dart';
+import 'package:my_rent/screens/home/screen_home.dart';
 import 'package:my_rent/screens/home/screen_unit_list.dart/screen_add_unit/widgets/unit_type_dropdown.dart';
+import 'package:my_rent/screens/screen_main_page.dart';
 import 'package:my_rent/widgets/cust_textfield_pre_title.dart';
 import 'package:my_rent/widgets/cust_appbar2.dart';
 import 'package:my_rent/widgets/rounded_elevated_button.dart';
@@ -71,7 +73,6 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
                 ),
                 body: Column(
                   children: [
-                    //-------Accomodate textfields-------
                     Container(
                       height: MediaQuery.of(context).size.height * 0.7,
                       margin: EdgeInsets.all(10),
@@ -131,22 +132,27 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
                     //------submit button------
                     RoundedElevatedButton(
                       onPressed: () {
-                        
-                        if (unitFormKey.currentState!.validate()) {
+                        // if (unitFormKey.currentState!.validate()) {
                           runMutation({
-                            'area': selectedDropDownItem != "Accomodate"
-                                ? int.tryParse(areaController.text)
+                            "area": selectedDropDownItem != "Accomodate"
+                                ? int.parse(areaController.text)
                                 : 0,
-                            'bhk': selectedDropDownItem == "Accomodate"
+                            "bhk": selectedDropDownItem == "Accomodate"
                                 ? int.parse(bhkController.text)
                                 : 0,
-                            'floor_no': int.tryParse(floorNoController.text),
-                            'property_id': widget.propertyId,
-                            'room_name': roomNameController.text,
-                            'room_no': int.tryParse(roomNoController.text),
+                            "floor_no": int.tryParse(floorNoController.text),
+                            "property_id": widget.propertyId,
+                            "room_name": roomNameController.text,
+                            "room_no": int.tryParse(roomNoController.text),
                             "type": selectedDropDownItem
                           });
-                        }
+                          // Navigator.pop(context);
+                          // Navigator.pushReplacement(
+                          //     context,
+                          //     (MaterialPageRoute(builder: (context) {
+                          //       return ScreenMainPage();
+                          //     })));
+                        // }
                       },
                       buttonTitle: "Next",
                       borderRadius: 12,
@@ -163,7 +169,7 @@ class _ScreenAddUnitState extends State<ScreenAddUnit> {
 //add Unit mutation
 
 String addUnit =
-    r"""mutation ADD_PROPERTY_UNIT($area: Int, $bhk: Int, $floor_no: Int, $property_id: uuid, $room_name: String , $room_no: Int, $type: unit_types_enum) {
+    r"""mutation ADD_PROPERTY_UNIT($area: Int, $bhk: Int, $floor_no: Int, $property_id: uuid, $room_name: String , $room_no: Int, $type: String) {
   insert_property_unit_one(object: {area: $area, bhk: $bhk, floor_no: $floor_no, property_id: $property_id, room_name: $room_name, room_no: $room_no, type: $type}){
     id
   }

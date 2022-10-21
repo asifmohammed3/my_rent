@@ -11,6 +11,7 @@ import 'package:my_rent/gql_client.dart';
 import 'package:my_rent/register_signin_sections/screen_register_next.dart';
 import 'package:my_rent/register_signin_sections/screen_signin.dart';
 import 'package:my_rent/screens/home/screen_unit_list.dart/screen_add_unit/screen_add_unit.dart';
+import 'package:my_rent/screens/home/screen_unit_list.dart/screen_unit_asset_data/screen_unit_asset_data.dart';
 import 'package:my_rent/screens/screen_main_page.dart';
 import 'package:my_rent/splash_screen/onboarding/screen_main_splash.dart';
 import 'package:my_rent/splash_screen/onboarding/screen_onboarding.dart';
@@ -53,7 +54,12 @@ void main() async {
           backgroundColor: Color.fromARGB(255, 0, 0, 0),
           scaffoldBackgroundColor: Color.fromARGB(255, 245, 245, 245),
         ),
-        home: SplashScreen()),
+        home: SplashScreen()
+        //  ScreenUnitAssetData(agreeRenewDate: "",currentTenant: "",unitName: "",unitStatus: "vaccant", statusColor: Colors.red,)
+        //     ScreenRegisterNext(
+        //   selectedOptions: ["property"],
+        // ),
+        ),
   ));
 }
 

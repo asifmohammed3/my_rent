@@ -9,9 +9,11 @@ class unitListTile extends StatelessWidget {
       required this.unitName,
       required this.currentTenant,
       required this.unitStatus,
-      required this.agreeRenewDate})
+      required this.agreeRenewDate,
+      required this.unitId})
       : super(key: key);
 
+  String unitId;
   String unitName;
   String currentTenant;
   String agreeRenewDate;
@@ -37,6 +39,7 @@ class unitListTile extends StatelessWidget {
             unitStatus: unitStatus,
             agreeRenewDate: agreeRenewDate,
             statusColor: statusColor(),
+            unitID: unitId,
           );
         }));
       },

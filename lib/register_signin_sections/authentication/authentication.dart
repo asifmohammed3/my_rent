@@ -89,8 +89,7 @@ signOut() async {
 
 Future<bool> _getFutureBool() {
   return Future.delayed(const Duration(seconds: 3), () async {
-
-    tokenID = await FirebaseAuth.instance.currentUser!.getIdToken(true);
+     tokenID = await FirebaseAuth.instance.currentUser!.getIdToken(true);
     print(tokenID.toString());
 
     print(JwtDecoder.decode(tokenID));

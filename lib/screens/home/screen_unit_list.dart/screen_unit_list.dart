@@ -23,21 +23,13 @@ class _ScreenHomeState extends State<ScreenUnitList> {
   final GlobalKey<ScaffoldState> _scaffolddKey = GlobalKey<ScaffoldState>();
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Query(
       options: QueryOptions(
-        fetchPolicy: FetchPolicy.cacheAndNetwork,
-
-        document:
-            gql(LIST_PROPERTIES), // this is the query string you just created
-      ),
+          fetchPolicy: FetchPolicy.cacheAndNetwork,
+          document: gql(listunit), // this is the query string you just created
+          variables: {"property_id": widget.propertyId},
+          pollInterval: Duration(seconds: 10)),
       builder: (QueryResult result,
           {VoidCallback? refetch, FetchMore? fetchMore}) {
         if (result.hasException) {
@@ -50,13 +42,13 @@ class _ScreenHomeState extends State<ScreenUnitList> {
           );
         }
 
-        var repositories = result.data;
+        var repositories = result.data!["property_unit"];
 
         if (repositories == null) {
           return const Text('No repositories');
         }
         print(repositories);
-        List<dynamic> list = result.data!["property"];
+        List<dynamic> list = result.data!["property_unit"];
 
         print(repositories);
 
@@ -70,36 +62,37 @@ class _ScreenHomeState extends State<ScreenUnitList> {
               scaffoldKey: _scaffolddKey,
               title: 'Unit List',
             ),
-            floatingActionButton: Padding(
-              padding: const EdgeInsets.only(bottom: 90.0),
-              child: SizedBox(
-                width: 122,
-                height: 52,
-                child: FloatingActionButton(
-                  backgroundColor: customBlue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18)),
-                  onPressed: () {
-                    //navigate to add unit page
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: ((context) {
-                      return ScreenAddUnit(propertyId: widget.propertyId,);
-                    })));
-                  },
-                  child: Row(children: const [
-                    Icon(
-                      Icons.add,
-                      size: 21,
-                    ),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    Text(
-                      "Add Unit",
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    )
-                  ]),
-                ),
+            floatingActionButton: SizedBox(
+              width: 122,
+              height: 52,
+              child: FloatingActionButton(
+                backgroundColor: customBlue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18)),
+                onPressed: () {
+                  //navigate to add unit page
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: ((context) {
+                    return ScreenAddUnit(
+                      propertyId: widget.propertyId,
+                    );
+                  })));
+                },
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.add,
+                        size: 21,
+                      ),
+                      SizedBox(
+                        width: 3,
+                      ),
+                      Text(
+                        "Add Unit",
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      )
+                    ]),
               ),
             ),
             body: Container(
@@ -117,21 +110,17 @@ class _ScreenHomeState extends State<ScreenUnitList> {
 
                   //Unit tile lists
                   Expanded(
-                    child: ListView(
-                      children: [
-                        unitListTile(
-                          unitName: "Unit 1",
+                    child: ListView.builder(
+                      itemCount: list.length,
+                      itemBuilder: (context, index) {
+                        return unitListTile(
+                          unitId: repositories[index]["id"],
+                          unitName: repositories[index]["room_name"],
                           currentTenant: "Tenant 1",
                           unitStatus: "Vacant", //"Occupied"  or "Vacant"
                           agreeRenewDate: "30/11/2023",
-                        ),
-                        unitListTile(
-                          unitName: "Unit 1",
-                          currentTenant: "Tenant 1",
-                          unitStatus: "Occupied", //"Occupied"  or "Vacant"
-                          agreeRenewDate: "30/11/2023",
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   )
                 ],
@@ -144,17 +133,19 @@ class _ScreenHomeState extends State<ScreenUnitList> {
   }
 }
 
-//add unit
+//list unit
 
-String addPropertyUnit = r""" 
-query LIST_PROPERTY {
-  property {
+String listunit = r""" 
+query LIST_UNITS($property_id: uuid ) {
+  property_unit(where: {property_id: {_eq: $property_id}}) {
     id
-    property_name
-    address
-    property_images {
-      path
-    }
+    floor_no
+    created_at
+    bhk
+    area
+    room_name
+    room_no
+    type
   }
 }
  """;
