@@ -56,9 +56,8 @@ class _ScreenUnitAssetDataState extends State<ScreenUnitAssetData> {
               color: Colors.white,
             )),
         body: Query(
-            options: QueryOptions(document: gql(getUnitAsset),variables: {
-    "uid":widget.unitID
-}),
+            options: QueryOptions(
+                document: gql(getUnitAsset), variables: {"uid": widget.unitID}),
             builder: (QueryResult result,
                 {VoidCallback? refetch, FetchMore? fetchMore}) {
               if (result.hasException) {
@@ -68,6 +67,7 @@ class _ScreenUnitAssetDataState extends State<ScreenUnitAssetData> {
               if (result.isLoading) {
                 return Center(child: const Text('Loading'));
               }
+              print(result.data);
               var repo = result.data!["property_unit"][0];
               List assetData = repo["unit_assets"];
               return Container(
@@ -163,10 +163,11 @@ class _ScreenUnitAssetDataState extends State<ScreenUnitAssetData> {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: UnitAssetTile(
-                              assetName: repo["unit_assets"][index]["asset"]["name"]
+                              assetName: repo["unit_assets"][index]["asset"]
+                                      ["name"]
                                   .toString(),
-                              assetCount: repo["unit_assets"][index]["asset_count"]
-                                      ["count"]
+                              assetCount: repo["unit_assets"][index]
+                                      ["asset_count"]["count"]
                                   .toString(),
                               onPressed: () {},
                             ),

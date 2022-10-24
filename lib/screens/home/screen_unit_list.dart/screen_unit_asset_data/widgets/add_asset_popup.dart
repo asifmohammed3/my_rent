@@ -60,6 +60,7 @@ class _AssetAlertDialogueState extends State<AssetAlertDialogue> {
               return Center(child: const Text('Loading'));
             }
             var repo = result.data!["asset_type"];
+            print(result.data);
             widget.assetList.clear();
             for (var assetData in repo) {
               (assetData as Map<String, dynamic>).forEach((key, value) {
@@ -68,12 +69,15 @@ class _AssetAlertDialogueState extends State<AssetAlertDialogue> {
                 }
               });
             }
+
             String getAssetId(assetName) {
-              String data = "";
+              var data = "";
               for (var assetData in repo) {
                 (assetData as Map<String, dynamic>).forEach((key, value) {
+                  
                   if (value == assetName) {
                     data = assetData["id"];
+                 
                   }
                 });
               }
@@ -86,7 +90,7 @@ class _AssetAlertDialogueState extends State<AssetAlertDialogue> {
                       Text("errrr------------" + error.toString()),
                   document: gql(addUnitAsset),
                   onCompleted: (dynamic resultData) {
-                    print("mutation result -----" + resultData);
+                    print("mutation result -----");
                   },
                 ),
                 builder: (
@@ -117,18 +121,20 @@ class _AssetAlertDialogueState extends State<AssetAlertDialogue> {
                             //     selectedAsset.value);
                             // print("_____" +
                             //     getAssetId(selectedAsset.value).toString());
-
+                        
                             final Map<String, String> unitAsset = {
-                              "asset_id": getAssetId(selectedAsset).toString(),
+                              "asset_id": getAssetId(selectedAsset.value).toString(),
                               "unit_id": widget.unitID
                             };
-                             //mutation with new asset and quantity
+                            print(List.filled(
+                                  int.parse(itemCountController.text),
+                                  unitAsset));
+                            //mutation with new asset and quantity
                             runMutation({
                               "unit_asset": List.filled(
                                   int.parse(itemCountController.text),
                                   unitAsset)
                             });
-                           
                           },
                           buttonName: Text("Add"),
                           buttonHeight: 40,
@@ -182,11 +188,13 @@ class AssetDropdown extends StatelessWidget {
                   emptyBuilder: (context, searchEntry) {
                     return Mutation(
                         options: MutationOptions(
-                          onError: (error) =>
-                              Text("errrr------------" + error.toString()),
+                          onError: (error) {
+                            print("--------");
+                            print(error);
+                          },
                           document: gql(addAssetType),
                           onCompleted: (dynamic resultData) {
-                            print("mutation result -----" + resultData);
+                            print("mutation result -----");
                           },
                         ),
                         builder: (
@@ -198,11 +206,7 @@ class AssetDropdown extends StatelessWidget {
                               custElevatedButton(
                                   onPressed: () {
                                     print(searchEntry);
-                                    // String assetName =
-                                    //     searchEntry == null ? "" : searchEntry;
-
                                     runMutation({"asset_name": searchEntry});
-
                                     Navigator.pop(context);
                                   },
                                   buttonName: Text("Add"))
