@@ -7,62 +7,16 @@ import 'package:my_rent/widgets/cust_elevatedbutton.dart';
 import 'package:my_rent/widgets/cust_subtitle.dart';
 import 'package:my_rent/widgets/cust_textfield_pre_title.dart';
 
-showAddAssetPopup(BuildContext context, itemCountController) {
-  List<String> assetList = [""];
-  String selectedAsset;
+ValueNotifier<String> selectedAsset = ValueNotifier<String>("");
 
+showAddAssetPopup(BuildContext context, String unitId) {
   const subTitleStyle = TextStyle(
     fontSize: 13,
     color: Color.fromARGB(255, 95, 95, 95),
   );
   // set up the AlertDialog
-  AlertDialog showAddAssetPopup = AlertDialog(
-    contentPadding: EdgeInsets.all(7),
-    title: CustSubTitle(subtitle: "Add Assets", paddingTop: 0),
-    content: Query(
-        options: QueryOptions(document: gql(getAssetType)),
-        builder: (QueryResult result,
-            {VoidCallback? refetch, FetchMore? fetchMore}) {
-          if (result.hasException) {
-            return Text(result.exception.toString());
-          }
-
-          if (result.isLoading) {
-            return Center(child: const Text('Loading'));
-          }
-          var repo = result.data!["asset_type"];
-          for (var assetData in repo) {
-            (assetData as Map<String, dynamic>).forEach((key, value) {
-              if (key == "name") {
-                print(value);
-                assetList.add(value);
-              }
-            });
-          }
-
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(40.0),
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                assetDropdown(assetList, assetList[0]),
-                addUnitPopupTextField("Quantity", itemCountController),
-                custElevatedButton(
-                  onPressed: () {
-                    //mutation with new asset and quantity
-                  },
-                  buttonName: Text("Add"),
-                  buttonHeight: 40,
-                  buttonWidth: 80,
-                )
-              ],
-            ),
-          );
-        }),
+  Widget showAddAssetPopup = AssetAlertDialogue(
+    unitID: unitId,
   );
 
   // show the dialog
@@ -74,90 +28,209 @@ showAddAssetPopup(BuildContext context, itemCountController) {
   );
 }
 
-Row assetDropdown(List<String> assets, String selectedAsset) {
-  return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-    SizedBox(
-      width: 80,
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Flexible(
-              child: Text(
-                maxLines: 2,
-                softWrap: false,
-                overflow: TextOverflow.ellipsis,
-                "Asset",
-                style: TextStyle(fontSize: 13, color: customBlue),
-              ),
-            ),
-            Text(":")
-          ],
-        ),
-      ),
-    ),
-    Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: SizedBox(
-        width: 150,
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: DropdownSearch<String>(
-              popupProps: PopupProps.menu(
-                emptyBuilder: (context, searchEntry) {
-                  return Mutation(
-                      options: MutationOptions(
-                        onError: (error) =>
-                            Text("errrr------------" + error.toString()),
-                        document: gql(addAssetType),
-                        onCompleted: (dynamic resultData) {
-                          print("mutation result -----" + resultData);
-                        },
-                      ),
-                      builder: (
-                        runMutation,
-                        result,
-                      ) {
-                        return Column(
-                          children: [
-                            custElevatedButton(
-                                onPressed: () {
-                                  print(searchEntry);
-                                  try {
-                                    runMutation({"asset_name": searchEntry});
-                                  } catch (e) {
-                                    print("er----$e");
-                                  }
+class AssetAlertDialogue extends StatefulWidget {
+  AssetAlertDialogue({
+    Key? key,
+    required this.unitID,
+  }) : super(key: key);
+  final List<String> assetList = [];
+  final String unitID;
 
-                                  Navigator.pop(context);
-                                  selectedAsset = searchEntry;
-                                },
-                                buttonName: Text("Add"))
-                          ],
-                        );
-                      });
-                },
-                errorBuilder: (context, searchEntry, exception) =>
-                    Text("Something went wrong"),
-                showSearchBox: true,
-                showSelectedItems: true,
-              ),
-              items: assets,
-              dropdownDecoratorProps: DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
-                  hintText: " asset",
+  @override
+  State<AssetAlertDialogue> createState() => _AssetAlertDialogueState();
+}
+
+class _AssetAlertDialogueState extends State<AssetAlertDialogue> {
+  TextEditingController itemCountController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      contentPadding: EdgeInsets.all(7),
+      title: CustSubTitle(subtitle: "Add Assets", paddingTop: 0),
+      content: Query(
+          options: QueryOptions(document: gql(getAssetType)),
+          builder: (QueryResult result,
+              {VoidCallback? refetch, FetchMore? fetchMore}) {
+            if (result.hasException) {
+              return Text(result.exception.toString());
+            }
+
+            if (result.isLoading) {
+              return Center(child: const Text('Loading'));
+            }
+            var repo = result.data!["asset_type"];
+            widget.assetList.clear();
+            for (var assetData in repo) {
+              (assetData as Map<String, dynamic>).forEach((key, value) {
+                if (key == "name") {
+                  widget.assetList.add(value);
+                }
+              });
+            }
+            String getAssetId(assetName) {
+              String data = "";
+              for (var assetData in repo) {
+                (assetData as Map<String, dynamic>).forEach((key, value) {
+                  if (value == assetName) {
+                    data = assetData["id"];
+                  }
+                });
+              }
+              return data;
+            }
+
+            return Mutation(
+                options: MutationOptions(
+                  onError: (error) =>
+                      Text("errrr------------" + error.toString()),
+                  document: gql(addUnitAsset),
+                  onCompleted: (dynamic resultData) {
+                    print("mutation result -----" + resultData);
+                  },
+                ),
+                builder: (
+                  runMutation,
+                  result,
+                ) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(40.0),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AssetDropdown(
+                          assets: widget.assetList,
+                        ),
+                        addUnitPopupTextField("Quantity", itemCountController),
+                        custElevatedButton(
+                          onPressed: () {
+                            print(selectedAsset.value +
+                                "  " +
+                                itemCountController.text);
+
+                            // final unitAsset = List.filled(
+                            //     int.parse(itemCountController.text),
+                            //     selectedAsset.value);
+                            // print("_____" +
+                            //     getAssetId(selectedAsset.value).toString());
+
+                            final Map<String, String> unitAsset = {
+                              "asset_id": getAssetId(selectedAsset).toString(),
+                              "unit_id": widget.unitID
+                            };
+                             //mutation with new asset and quantity
+                            runMutation({
+                              "unit_asset": List.filled(
+                                  int.parse(itemCountController.text),
+                                  unitAsset)
+                            });
+                           
+                          },
+                          buttonName: Text("Add"),
+                          buttonHeight: 40,
+                          buttonWidth: 80,
+                        ),
+                      ],
+                    ),
+                  );
+                });
+          }),
+    );
+  }
+}
+
+class AssetDropdown extends StatelessWidget {
+  List<String> assets;
+  AssetDropdown({Key? key, required this.assets}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      SizedBox(
+        width: 80,
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Text(
+                  maxLines: 2,
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
+                  "Asset",
+                  style: TextStyle(fontSize: 13, color: customBlue),
                 ),
               ),
-              onChanged: (v) {
-                selectedAsset = v!;
-
-                print(v);
-              }),
+              Text(":")
+            ],
+          ),
         ),
       ),
-    )
-  ]);
+      Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: SizedBox(
+          width: 150,
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: DropdownSearch<String>(
+                popupProps: PopupProps.menu(
+                  emptyBuilder: (context, searchEntry) {
+                    return Mutation(
+                        options: MutationOptions(
+                          onError: (error) =>
+                              Text("errrr------------" + error.toString()),
+                          document: gql(addAssetType),
+                          onCompleted: (dynamic resultData) {
+                            print("mutation result -----" + resultData);
+                          },
+                        ),
+                        builder: (
+                          runMutation,
+                          result,
+                        ) {
+                          return Column(
+                            children: [
+                              custElevatedButton(
+                                  onPressed: () {
+                                    print(searchEntry);
+                                    // String assetName =
+                                    //     searchEntry == null ? "" : searchEntry;
+
+                                    runMutation({"asset_name": searchEntry});
+
+                                    Navigator.pop(context);
+                                  },
+                                  buttonName: Text("Add"))
+                            ],
+                          );
+                        });
+                  },
+                  errorBuilder: (context, searchEntry, exception) =>
+                      Text("Something went wrong"),
+                  showSearchBox: true,
+                  showSelectedItems: true,
+                ),
+                items: assets,
+                dropdownDecoratorProps: DropDownDecoratorProps(
+                  dropdownSearchDecoration: InputDecoration(
+                    hintText: " asset",
+                  ),
+                ),
+                onChanged: (v) {
+                  selectedAsset.value = v!;
+
+                  print(v);
+                }),
+          ),
+        ),
+      )
+    ]);
+  }
 }
 
 Row addUnitPopupTextField(String name, TextEditingController controller) {
@@ -191,6 +264,7 @@ Row addUnitPopupTextField(String name, TextEditingController controller) {
           padding: const EdgeInsets.all(5.0),
           child: TextField(
             controller: controller,
+            keyboardType: TextInputType.number,
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(10.0),
                 border: OutlineInputBorder(
@@ -221,5 +295,15 @@ String getAssetType = """query GET_ASSET_TYPES {
   asset_type {
     id
     name
+  }
+}""";
+
+//add new assets in a unit
+String addUnitAsset =
+    r"""mutation ADD_UNIT_ASSET($unit_asset: [unit_assets_insert_input!]!) {
+  insert_unit_assets(objects: $unit_asset){
+    returning{
+      id
+    }
   }
 }""";

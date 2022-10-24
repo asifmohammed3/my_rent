@@ -34,8 +34,6 @@ class ScreenUnitAssetData extends StatefulWidget {
 class _ScreenUnitAssetDataState extends State<ScreenUnitAssetData> {
   TextEditingController assetSearchController = TextEditingController();
 
-  TextEditingController itemCountController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -49,7 +47,7 @@ class _ScreenUnitAssetDataState extends State<ScreenUnitAssetData> {
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
-              showAddAssetPopup(context, itemCountController);
+              showAddAssetPopup(context, widget.unitID);
             },
             backgroundColor: customBlue,
             child: Icon(
@@ -58,8 +56,9 @@ class _ScreenUnitAssetDataState extends State<ScreenUnitAssetData> {
               color: Colors.white,
             )),
         body: Query(
-            options: QueryOptions(document: gql(getUnitAsset),variables: {"uid":widget.unitID}),
-            
+            options: QueryOptions(document: gql(getUnitAsset),variables: {
+    "uid":widget.unitID
+}),
             builder: (QueryResult result,
                 {VoidCallback? refetch, FetchMore? fetchMore}) {
               if (result.hasException) {
@@ -69,7 +68,8 @@ class _ScreenUnitAssetDataState extends State<ScreenUnitAssetData> {
               if (result.isLoading) {
                 return Center(child: const Text('Loading'));
               }
-              var repo = result.data!["asset_type"];
+              var repo = result.data!["property_unit"][0];
+              List assetData = repo["unit_assets"];
               return Container(
                 margin: EdgeInsets.only(left: 15, right: 15, top: 10),
                 child: Column(
@@ -156,10 +156,23 @@ class _ScreenUnitAssetDataState extends State<ScreenUnitAssetData> {
                         ),
                       ),
                     ),
-                    UnitAssetTile(
-                      assetName: "Television",
-                      assetCount: "5",
-                      onPressed: () {},
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: assetData.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: UnitAssetTile(
+                              assetName: repo["unit_assets"][index]["asset"]["name"]
+                                  .toString(),
+                              assetCount: repo["unit_assets"][index]["asset_count"]
+                                      ["count"]
+                                  .toString(),
+                              onPressed: () {},
+                            ),
+                          );
+                        },
+                      ),
                     )
                   ],
                 ),
@@ -175,7 +188,7 @@ const String getUnitAsset = r"""query GET_UNIT_ASSET($uid: uuid) {
   property_unit(where: {id: {_eq: $uid}}) {
     id
     unit_assets(distinct_on: asset_id) {
-      asset_type {
+      asset {
         name
       }
       asset_count {

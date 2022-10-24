@@ -29,7 +29,7 @@ class _ScreenHomeState extends State<ScreenUnitList> {
           fetchPolicy: FetchPolicy.cacheAndNetwork,
           document: gql(listunit), // this is the query string you just created
           variables: {"property_id": widget.propertyId},
-          pollInterval: Duration(seconds: 10)),
+         ),
       builder: (QueryResult result,
           {VoidCallback? refetch, FetchMore? fetchMore}) {
         if (result.hasException) {
@@ -63,7 +63,7 @@ class _ScreenHomeState extends State<ScreenUnitList> {
               title: 'Unit List',
             ),
             floatingActionButton: SizedBox(
-              width: 122,
+              width: 120,
               height: 52,
               child: FloatingActionButton(
                 backgroundColor: customBlue,
@@ -79,7 +79,7 @@ class _ScreenHomeState extends State<ScreenUnitList> {
                   })));
                 },
                 child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: const [
                       Icon(
                         Icons.add,
