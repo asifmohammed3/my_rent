@@ -106,24 +106,25 @@ class _ScreenHomeState extends State<ScreenHome> {
                       return const Text('No repositories');
                     }
                     print(repositories);
+                    var repo =result.data!["property"];
                     List<dynamic> list = result.data!["property"];
 
-                    print(repositories);
+                    print("*****" + list.length.toString());
 
                     return ListView.builder(
                       itemCount: list.length,
                       itemBuilder: (context, index) {
                         return FutureBuilder<String>(
                             future: getImgUrl(
-                                list[index]["property_images"][0]["path"]),
+                                repo[index]["property_images"][0]["path"]),
                             builder: (BuildContext context,
                                 AsyncSnapshot<String> snapshot) {
                               print(snapshot.data);
                               return PropertyTile(
-                                  propertyName: list[index]["property_name"],
-                                  branchLocation: list[index]["address"],
-                                  propertyId: list[index]["id"],
-                                  numberOfUnits: list[index]
+                                  propertyName: repo[index]["property_name"],
+                                  branchLocation: repo[index]["address"],
+                                  propertyId: repo[index]["id"],
+                                  numberOfUnits: repo[index]
                                               ["property_units_aggregate"]
                                           ["aggregate"]["count"]
                                       .toString(),

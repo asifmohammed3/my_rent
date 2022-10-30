@@ -65,7 +65,7 @@ class _ScreenUnitAssetDataState extends State<ScreenUnitAssetData> {
               }
 
               if (result.isLoading) {
-                return Center(child: const Text('Loading'));
+                return Center(child: CircularProgressIndicator());
               }
               print(result.data);
               var repo = result.data!["property_unit"][0];

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -74,10 +76,8 @@ class _AssetAlertDialogueState extends State<AssetAlertDialogue> {
               var data = "";
               for (var assetData in repo) {
                 (assetData as Map<String, dynamic>).forEach((key, value) {
-                  
                   if (value == assetName) {
                     data = assetData["id"];
-                 
                   }
                 });
               }
@@ -90,7 +90,7 @@ class _AssetAlertDialogueState extends State<AssetAlertDialogue> {
                       Text("errrr------------" + error.toString()),
                   document: gql(addUnitAsset),
                   onCompleted: (dynamic resultData) {
-                    print("mutation result -----");
+                    print("mutation result -----  ${resultData.toString()}");
                   },
                 ),
                 builder: (
@@ -108,6 +108,7 @@ class _AssetAlertDialogueState extends State<AssetAlertDialogue> {
                       children: [
                         AssetDropdown(
                           assets: widget.assetList,
+                         
                         ),
                         addUnitPopupTextField("Quantity", itemCountController),
                         custElevatedButton(
@@ -121,20 +122,20 @@ class _AssetAlertDialogueState extends State<AssetAlertDialogue> {
                             //     selectedAsset.value);
                             // print("_____" +
                             //     getAssetId(selectedAsset.value).toString());
-                        
+
                             final Map<String, String> unitAsset = {
-                              "asset_id": getAssetId(selectedAsset.value).toString(),
+                              "asset_id":
+                                  getAssetId(selectedAsset.value).toString(),
                               "unit_id": widget.unitID
                             };
-                            print(List.filled(
-                                  int.parse(itemCountController.text),
-                                  unitAsset));
+                            var unitAssetJson = json.encode(unitAsset);
+                            List data = List.filled(
+                                int.parse(itemCountController.text),
+                                unitAssetJson);
+                            print(data);
+
                             //mutation with new asset and quantity
-                            runMutation({
-                              "unit_asset": List.filled(
-                                  int.parse(itemCountController.text),
-                                  unitAsset)
-                            });
+                            runMutation({"unit_asset": data});
                           },
                           buttonName: Text("Add"),
                           buttonHeight: 40,
@@ -151,7 +152,9 @@ class _AssetAlertDialogueState extends State<AssetAlertDialogue> {
 
 class AssetDropdown extends StatelessWidget {
   List<String> assets;
-  AssetDropdown({Key? key, required this.assets}) : super(key: key);
+  VoidCallback? refetch;
+  AssetDropdown({Key? key, required this.assets, this.refetch})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +197,8 @@ class AssetDropdown extends StatelessWidget {
                           },
                           document: gql(addAssetType),
                           onCompleted: (dynamic resultData) {
-                            print("mutation result -----");
+                            print(
+                                "mutation result -----${resultData.toString()}");
                           },
                         ),
                         builder: (
@@ -207,6 +211,9 @@ class AssetDropdown extends StatelessWidget {
                                   onPressed: () {
                                     print(searchEntry);
                                     runMutation({"asset_name": searchEntry});
+
+                                    refetch;
+
                                     Navigator.pop(context);
                                   },
                                   buttonName: Text("Add"))
@@ -255,7 +262,7 @@ Row addUnitPopupTextField(String name, TextEditingController controller) {
                 style: TextStyle(fontSize: 13, color: customBlue),
               ),
             ),
-            Text(":")
+            Text("c:")
           ],
         ),
       ),
